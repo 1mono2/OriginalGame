@@ -23,4 +23,5 @@ public class PlayerController : MonoBehaviour
     {
         rigidbody.MovePosition(rigidbody.position + transform.TransformDirection(moveDir) * moveSpeed * Time.deltaTime);
     }
+
 }

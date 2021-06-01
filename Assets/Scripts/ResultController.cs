@@ -3,16 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour
+public class ResultController : MonoBehaviour
 {
-
-    public GameObject player1;
-    public GameObject player2;
-
     [SceneName]
-    public string resultScene;
-
-
+    public string startScene;
 
     // Start is called before the first frame update
     void Start()
@@ -23,12 +17,15 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartCoroutine(LoadStart());
+        }
     }
 
-    private IEnumerator LoadResult ()
+    private IEnumerator LoadStart()
     {
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(resultScene);
+        SceneManager.LoadScene(startScene);
     }
 }
