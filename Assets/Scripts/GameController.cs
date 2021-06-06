@@ -12,7 +12,9 @@ public class GameController : MonoBehaviour
     Player2Controller player2Controller;
 
     [SceneName]
-    public string resultScene;
+    public string resultSceneSeeker;
+    [SceneName]
+    public string resultSceneEscapee;
 
     public float time = 60.0f;
 
@@ -29,14 +31,14 @@ public class GameController : MonoBehaviour
         time -= Time.deltaTime;
         if(time <= 0)
         {
-            SceneManager.LoadScene(resultScene);
+            SceneManager.LoadScene(resultSceneEscapee);
         }
     }
 
-    private IEnumerator LoadResult ()
+    public IEnumerator LoadResult ()
     {
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(resultScene);
+        SceneManager.LoadScene(resultSceneSeeker);
     }
 
     public void P1MoveUpDownPos(float beforeScale, float afterScale)

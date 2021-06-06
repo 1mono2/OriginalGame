@@ -1001,7 +1001,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 460739580}
   player2: {fileID: 1523842675}
-  resultScene: Result
+  resultSceneSeeker: ResultSeeker
+  resultSceneEscapee: ResultEscapee
   time: 60
 --- !u!4 &1324666658
 Transform:

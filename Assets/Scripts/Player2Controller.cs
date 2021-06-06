@@ -11,8 +11,7 @@ public class Player2Controller : MonoBehaviour
     public GameObject planet;
     public GameObject gameobjController;
     GameController gameController;
-    [SceneName]
-    public string resultScene;
+
 
     private void Start()
     {
@@ -36,15 +35,10 @@ public class Player2Controller : MonoBehaviour
     {
         if(collision.gameObject.tag == "escapee")
         {
-            StartCoroutine( LoadResult());
+            StartCoroutine(gameController.LoadResult());
         }
     }
 
-    private IEnumerator LoadResult()
-    {
-        yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(resultScene);
-    }
 
     public void SpeedUp()
     {

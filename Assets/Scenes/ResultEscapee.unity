@@ -259,7 +259,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: YOU WIN!
+  m_Text: "WSCAPEE\n WIN!"
 --- !u!222 &917014850
 CanvasRenderer:
   m_ObjectHideFlags: 0

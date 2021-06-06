@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 55d7eb9a628e52248b748f7e2e31b87c
   - enabled: 1
-    path: Assets/Scenes/Result.unity
+    path: Assets/Scenes/ResultEscapee.unity
     guid: eeface95d9ebe9f4e852f1f2823cad8d
+  - enabled: 1
+    path: Assets/Scenes/ResultSeeker.unity
+    guid: 5e8ac1385f1b14d4fafc5a182ea04d46
   m_configObjects: {}
