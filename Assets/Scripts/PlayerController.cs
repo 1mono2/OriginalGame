@@ -8,10 +8,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDir;
     Rigidbody rigidbody;
     public GameObject planet;
+    public GameObject gameobjController;
+    GameController gameController;
 
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        gameController = gameobjController.GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -57,17 +60,25 @@ public class PlayerController : MonoBehaviour
     public void PlanetScaleUp()
     {
         planet.transform.localScale = new Vector3(20, 20, 20);
-        SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
-        Vector3 scaleUpPos = transform.position * (20.0f / 15.0f) ;
-        Debug.Log(scaleUpPos);
-        rigidbody.MovePosition(scaleUpPos);
+        // SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
+        MoveUpDownPos(15.0f, 20.0f);
+        gameController.P2MoveUpDownPos(15.0f, 20.0f);
         StartCoroutine(SetDefaltPlanetScale());
-
     }
 
     public IEnumerator SetDefaltPlanetScale()
     {
         yield return new WaitForSeconds(5.0f);
         planet.transform.localScale = new Vector3(15, 15, 15);
+        MoveUpDownPos(20.0f, 15.0f);
+        gameController.P2MoveUpDownPos(20.0f, 15.0f);
     }
+
+    public void MoveUpDownPos(float beforeScale, float afterScale)
+    {
+        Vector3 scaleUpPos = transform.position * (afterScale / beforeScale);
+        rigidbody.MovePosition(scaleUpPos);
+    }
+
+   
 }

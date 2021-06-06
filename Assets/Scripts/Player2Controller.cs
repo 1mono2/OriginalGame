@@ -9,7 +9,8 @@ public class Player2Controller : MonoBehaviour
     private Vector3 moveDir;
     Rigidbody rigidbody;
     public GameObject planet;
-
+    public GameObject gameobjController;
+    GameController gameController;
     [SceneName]
     public string resultScene;
 
@@ -17,6 +18,7 @@ public class Player2Controller : MonoBehaviour
     {
         
         rigidbody = GetComponent<Rigidbody>();
+        gameController = gameobjController.GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -72,5 +74,29 @@ public class Player2Controller : MonoBehaviour
         float y = radius * Mathf.Sin(angle1 * Mathf.Deg2Rad) * Mathf.Sin(angle2 * Mathf.Deg2Rad);
         float z = radius * Mathf.Cos(angle1 * Mathf.Deg2Rad);
         return new Vector3(x, y, z);
+    }
+
+
+    public void PlanetScaleDown()
+    {
+        planet.transform.localScale = new Vector3(10, 10, 10);
+        SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
+        MoveUpDownPos(15.0f, 10.0f);
+        gameController.P1MoveUpDownPos(15.0f, 10.0f);
+        StartCoroutine(SetDefaltPlanetScale());
+    }
+
+    public IEnumerator SetDefaltPlanetScale()
+    {
+        yield return new WaitForSeconds(5.0f);
+        planet.transform.localScale = new Vector3(15, 15, 15);
+        MoveUpDownPos(10.0f, 15.0f);
+        gameController.P1MoveUpDownPos(10.0f, 15.0f);
+    }
+
+    public void MoveUpDownPos(float beforeScale, float afterScale)
+    {
+        Vector3 scaleUpPos = transform.position * (afterScale / beforeScale);
+        rigidbody.MovePosition(scaleUpPos);
     }
 }
