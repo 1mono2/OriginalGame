@@ -6,6 +6,7 @@ TagManager:
   tags:
   - escapee
   - seeker
+  - Item
   layers:
   - Default
   - TransparentFX
