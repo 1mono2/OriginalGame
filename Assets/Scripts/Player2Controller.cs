@@ -12,18 +12,66 @@ public class Player2Controller : MonoBehaviour
     public GameObject gameobjController;
     GameController gameController;
 
+    GameObject astronaut;
+    Animator animator;
+
 
     private void Start()
     {
         
         rigidbody = GetComponent<Rigidbody>();
         gameController = gameobjController.GetComponent<GameController>();
+
+        astronaut = GameObject.Find("Player2/Astronaut");
+        animator = astronaut.GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveDir = new Vector3(Input.GetAxisRaw("Player2Horizontal"), 0, Input.GetAxisRaw("Player2Vertical")).normalized;
+        float h = Input.GetAxisRaw("Player2Horizontal");
+        float v = Input.GetAxisRaw("Player2Vertical");
+        moveDir = new Vector3(h, 0, v).normalized;
+
+        animator.SetInteger("AnimationPar", 0);
+        if (h != 0 | v != 0)
+        {
+            animator.SetInteger("AnimationPar", 1);
+
+        }
+        if (v > 0)
+        {
+            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+            if (h < 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
+            }
+            else if (h > 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
+            }
+
+        }
+        else if (v < 0)
+        {
+            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
+            if (h < 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
+            }
+            else if (h > 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
+            }
+        }
+        else if (h < 0)
+        {
+            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
+        }
+        else if (h > 0)
+        {
+            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
+        }
     }
 
     private void FixedUpdate()

@@ -11,16 +11,65 @@ public class PlayerController : MonoBehaviour
     public GameObject gameobjController;
     GameController gameController;
 
+    Animator animator;
+    GameObject cat; 
+
+
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         gameController = gameobjController.GetComponent<GameController>();
+
+         cat = GameObject.Find("Player/cat");
+        animator = cat.GetComponent<Animator>();
+ 
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveDir = new Vector3(Input.GetAxisRaw("Player1Horizontal"), 0, Input.GetAxisRaw("Player1Vertical")).normalized;
+        float h = Input.GetAxisRaw("Player1Horizontal");
+        float v = Input.GetAxisRaw("Player1Vertical");
+        moveDir = new Vector3(h, 0, v).normalized;
+        animator.SetInteger("Walking", 0);
+        if (h !=0 | v!=0)
+        {
+            animator.SetInteger("Walking", 1);
+           
+        }
+        if (v >0)
+        {
+            cat.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+            if (h < 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
+            }else if (h > 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
+            }
+
+        }else if (v<0)
+        {
+            cat.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
+            if (h < 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
+            }
+            else if (h > 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
+            }
+        }else if (h < 0)
+        {
+            cat.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
+        }
+        else if (h > 0)
+        {
+            cat.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
+        }
+
+
+
     }
 
     private void FixedUpdate()
