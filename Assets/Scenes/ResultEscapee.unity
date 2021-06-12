@@ -247,7 +247,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 8c287bd1fb81f424b88d4476bdce4b1a, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -259,7 +259,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "WSCAPEE\n WIN!"
+  m_Text: "\u306D\u3053\u3061\u3083\u3093\u306E\u304B\u3061"
 --- !u!222 &917014850
 CanvasRenderer:
   m_ObjectHideFlags: 0
