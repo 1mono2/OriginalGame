@@ -28,48 +28,51 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float h = Input.GetAxisRaw("Player1Horizontal");
-        float v = Input.GetAxisRaw("Player1Vertical");
-        moveDir = new Vector3(h, 0, v).normalized;
-        animator.SetInteger("Walking", 0);
-        if (h !=0 | v!=0)
+        if (gameController.isBattling == true)
         {
-            animator.SetInteger("Walking", 1);
-           
-        }
-        if (v >0)
-        {
-            cat.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-            if (h < 0)
+            float h = Input.GetAxisRaw("Player1Horizontal");
+            float v = Input.GetAxisRaw("Player1Vertical");
+            moveDir = new Vector3(h, 0, v).normalized;
+            animator.SetInteger("Walking", 0);
+            if (h != 0 | v != 0)
             {
-                cat.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
-            }else if (h > 0)
-            {
-                cat.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
-            }
+                animator.SetInteger("Walking", 1);
 
-        }else if (v<0)
-        {
-            cat.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
-            if (h < 0)
+            }
+            if (v > 0)
             {
-                cat.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+                if (h < 0)
+                {
+                    cat.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
+                }
+                else if (h > 0)
+                {
+                    cat.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
+                }
+
+            }
+            else if (v < 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
+                if (h < 0)
+                {
+                    cat.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
+                }
+                else if (h > 0)
+                {
+                    cat.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
+                }
+            }
+            else if (h < 0)
+            {
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
             }
             else if (h > 0)
             {
-                cat.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
+                cat.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             }
-        }else if (h < 0)
-        {
-            cat.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
         }
-        else if (h > 0)
-        {
-            cat.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
-        }
-
-
-
     }
 
     private void FixedUpdate()
@@ -80,6 +83,7 @@ public class PlayerController : MonoBehaviour
     public void SpeedUp()
     {
         moveSpeed = 10;
+        gameController.FloatingParticle("P1");
         StartCoroutine(SetDefalutSpeed());
     }
 
@@ -87,6 +91,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         moveSpeed = 5;
+        gameController.FinishingParticle();
     }
 
     public void Warp()

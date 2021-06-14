@@ -5,8 +5,8 @@ using UnityEngine;
 public class SpawnerScript : MonoBehaviour
 {
     public GameObject[] items;
-    // public GameObject gameObjController;
-    // public GameController gameController;
+    public GameObject gameObjController;
+    public GameController gameController;
     Rigidbody rigidbody;
     public GameObject planet;
 
@@ -17,7 +17,7 @@ public class SpawnerScript : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        // gameController = gameObjController.GetComponent<GameController>();
+        gameController = gameObjController.GetComponent<GameController>();
         StartCoroutine(ExistCheckAndGenerate());
 
     }
@@ -25,14 +25,16 @@ public class SpawnerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeleft -= Time.deltaTime;
-        if(timeleft <= 0.0)
+        if (gameController.isBattling == true)
         {
-            Warp();
-            
-            timeleft = defaltTimeLeft;
-        }
+            timeleft -= Time.deltaTime;
+            if (timeleft <= 0.0)
+            {
+                Warp();
 
+                timeleft = defaltTimeLeft;
+            }
+        }
    
        
         

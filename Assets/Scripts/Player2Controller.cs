@@ -29,48 +29,51 @@ public class Player2Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float h = Input.GetAxisRaw("Player2Horizontal");
-        float v = Input.GetAxisRaw("Player2Vertical");
-        moveDir = new Vector3(h, 0, v).normalized;
-
-        animator.SetInteger("AnimationPar", 0);
-        if (h != 0 | v != 0)
+        if (gameController.isBattling == true)
         {
-            animator.SetInteger("AnimationPar", 1);
+            float h = Input.GetAxisRaw("Player2Horizontal");
+            float v = Input.GetAxisRaw("Player2Vertical");
+            moveDir = new Vector3(h, 0, v).normalized;
 
-        }
-        if (v > 0)
-        {
-            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-            if (h < 0)
+            animator.SetInteger("AnimationPar", 0);
+            if (h != 0 | v != 0)
             {
-                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
+                animator.SetInteger("AnimationPar", 1);
+
+            }
+            if (v > 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+                if (h < 0)
+                {
+                    astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -45, 0);
+                }
+                else if (h > 0)
+                {
+                    astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
+                }
+
+            }
+            else if (v < 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
+                if (h < 0)
+                {
+                    astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
+                }
+                else if (h > 0)
+                {
+                    astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
+                }
+            }
+            else if (h < 0)
+            {
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
             }
             else if (h > 0)
             {
-                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 45, 0);
+                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             }
-
-        }
-        else if (v < 0)
-        {
-            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
-            if (h < 0)
-            {
-                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -135, 0);
-            }
-            else if (h > 0)
-            {
-                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 135, 0);
-            }
-        }
-        else if (h < 0)
-        {
-            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, -90, 0);
-        }
-        else if (h > 0)
-        {
-            astronaut.gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
         }
     }
 
@@ -91,6 +94,7 @@ public class Player2Controller : MonoBehaviour
     public void SpeedUp()
     {
         moveSpeed = 10;
+        gameController.FloatingParticle("P2");
         StartCoroutine(SetDefalutSpeed());
     }
 
@@ -98,6 +102,7 @@ public class Player2Controller : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         moveSpeed = 5;
+        gameController.FinishingParticle();
     }
 
     public void Warp()
