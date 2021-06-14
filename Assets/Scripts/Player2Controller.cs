@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player2Controller : MonoBehaviour
 {
-    private float moveSpeed = 5;
+    public float moveSpeed = 5;
     private Vector3 moveDir;
     Rigidbody rigidbody;
     public GameObject planet;
