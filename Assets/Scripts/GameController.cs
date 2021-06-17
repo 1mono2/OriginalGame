@@ -24,30 +24,47 @@ public class GameController : MonoBehaviour
 
     public bool isBattling;
 
+    GameObject hiroyukiCat;
+
     // Start is called before the first frame update
     void Start()
     {
         playerController = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<Player2Controller>();
         isBattling = false;
+
+        hiroyukiCat =  GameObject.Find("HiroyukiCat");
+        hiroyukiCat.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
-    void Update()
+    void  Update()
     {
-        if (isBattling == true) { 
-        time -= Time.deltaTime;
-        if(time <= 0)
-        {
-            SceneManager.LoadScene(resultSceneEscapee);
-        }
+        if (isBattling == true)
+        { 
+            if(time <= 0)
+            {
+                
+                hiroyukiCat.SetActive(true);
+                StartCoroutine(LoadResulEscapeet());
+            }
+            else
+            {
+                time -= Time.deltaTime;
+            }
         }
     }
 
     public IEnumerator LoadResult ()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneSeeker);
+    }
+
+    public IEnumerator LoadResulEscapeet()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(resultSceneEscapee);
     }
 
     public void P1MoveUpDownPos(float beforeScale, float afterScale)

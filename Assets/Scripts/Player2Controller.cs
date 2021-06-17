@@ -15,6 +15,8 @@ public class Player2Controller : MonoBehaviour
     GameObject astronaut;
     Animator animator;
 
+    GameObject UniCat;
+
 
     private void Start()
     {
@@ -24,6 +26,10 @@ public class Player2Controller : MonoBehaviour
 
         astronaut = GameObject.Find("Player2/Astronaut");
         animator = astronaut.GetComponent<Animator>();
+        // ‰F’ˆ”L
+        UniCat = GameObject.Find("UniverseCat");
+        UniCat.gameObject.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -86,6 +92,7 @@ public class Player2Controller : MonoBehaviour
     {
         if(collision.gameObject.tag == "escapee")
         {
+            UniCat.gameObject.SetActive(true);
             StartCoroutine(gameController.LoadResult());
         }
     }
