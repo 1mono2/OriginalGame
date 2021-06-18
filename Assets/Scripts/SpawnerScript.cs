@@ -11,7 +11,8 @@ public class SpawnerScript : MonoBehaviour
     public GameObject planet;
 
     public float timeleft = 0.0f;
-    public float defaltTimeLeft = 5.0f;
+    public float defaltTimeLeft = 3.0f;
+    public float itemInterval = 7f; 
 
     // Start is called before the first frame update
     void Start()
@@ -35,25 +36,24 @@ public class SpawnerScript : MonoBehaviour
                 timeleft = defaltTimeLeft;
             }
         }
-   
-       
         
     }
 
     IEnumerator ExistCheckAndGenerate()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(1);
-            GameObject item = GameObject.FindGameObjectWithTag("Item");
-           if(item == null)
+        if (gameController.isBattling == true) { 
+            while (true)
             {
-                yield return new WaitForSeconds(10);
-                Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
-            }
+                yield return new WaitForSeconds(1);
+                GameObject item = GameObject.FindGameObjectWithTag("Item");
+               if(item == null)
+                {
+                    yield return new WaitForSeconds(itemInterval);
+                    Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
+                }
            
+            }
         }
-        
     }
 
     public void Warp()

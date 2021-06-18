@@ -11,7 +11,8 @@ public class GameController : MonoBehaviour
     public GameObject player2;
     PlayerController playerController;
     Player2Controller player2Controller;
-
+    public GameObject spawner;
+    SpawnerScript spawnerScript;
     public Camera cameraParticle;
    
 
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour
     {
         playerController = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<Player2Controller>();
+        spawnerScript = spawner.GetComponent<SpawnerScript>();
         isBattling = false;
 
         hiroyukiCat =  GameObject.Find("HiroyukiCat");
@@ -78,6 +80,12 @@ public class GameController : MonoBehaviour
         
     }
 
+    public void SpawnerMoveUpDownPos(float beforeScale, float afterScale)
+    {
+        spawnerScript.MoveUpDownPos(beforeScale, afterScale);
+    }
+
+    // speedUpItem
     public void FloatingParticle(string player)
     {
         if(player == "P1")

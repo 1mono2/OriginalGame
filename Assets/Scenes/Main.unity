@@ -2428,6 +2428,7 @@ MonoBehaviour:
   planet: {fileID: 265378627}
   timeleft: 0
   defaltTimeLeft: 5
+  itemInterval: 7
 --- !u!1 &977876763
 GameObject:
   m_ObjectHideFlags: 0
@@ -8272,6 +8273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 1155220347}
   player2: {fileID: 1523842675}
+  spawner: {fileID: 968552849}
   cameraParticle: {fileID: 326716109}
   resultSceneSeeker: ResultSeeker
   resultSceneEscapee: ResultEscapee
@@ -9809,7 +9811,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1988469735
 MonoBehaviour:
   m_ObjectHideFlags: 0

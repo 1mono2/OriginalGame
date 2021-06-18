@@ -137,6 +137,7 @@ public class Player2Controller : MonoBehaviour
         SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
         MoveUpDownPos(15.0f, 10.0f);
         gameController.P1MoveUpDownPos(15.0f, 10.0f);
+        gameController.SpawnerMoveUpDownPos(15.0f, 20.0f);
         StartCoroutine(SetDefaltPlanetScale());
     }
 
@@ -146,6 +147,7 @@ public class Player2Controller : MonoBehaviour
         planet.transform.localScale = new Vector3(15, 15, 15);
         MoveUpDownPos(10.0f, 15.0f);
         gameController.P1MoveUpDownPos(10.0f, 15.0f);
+        gameController.SpawnerMoveUpDownPos(10.0f, 15.0f);
     }
 
     public void MoveUpDownPos(float beforeScale, float afterScale)
