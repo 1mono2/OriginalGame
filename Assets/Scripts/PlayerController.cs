@@ -1,39 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
+  
     public float moveSpeed = 5;
     private Vector3 moveDir;
     Rigidbody rigidbody;
+
     public GameObject planet;
     public GameObject gameobjController;
     GameController gameController;
 
+    [SerializeField]
+    private GameObject cat;
     Animator animator;
-    GameObject cat; 
-
 
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        planet = GameObject.Find("Planet");
+        gameobjController = GameObject.Find("GameController");
         gameController = gameobjController.GetComponent<GameController>();
 
-         cat = GameObject.Find("Player/cat");
         animator = cat.GetComponent<Animator>();
- 
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameController.isBattling == true)
+        if (gameController.isBattling == true && photonView.IsMine)
         {
             float h = Input.GetAxisRaw("Player1Horizontal");
             float v = Input.GetAxisRaw("Player1Vertical");
             moveDir = new Vector3(h, 0, v).normalized;
-            animator.SetInteger("Walking", 0);
+           // animator.SetInteger("Walking", 0);
             if (h != 0 | v != 0)
             {
                 animator.SetInteger("Walking", 1);

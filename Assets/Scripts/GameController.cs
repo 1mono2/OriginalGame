@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviourPunCallbacks
 {
-
+ 
     public GameObject player1;
     public GameObject player2;
     PlayerController playerController;
@@ -27,9 +29,13 @@ public class GameController : MonoBehaviour
 
     GameObject hiroyukiCat;
 
+    public bool isOnline = true;
+
     // Start is called before the first frame update
     void Start()
     {
+        Connect();
+
         playerController = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<Player2Controller>();
         spawnerScript = spawner.GetComponent<SpawnerScript>();
@@ -37,6 +43,64 @@ public class GameController : MonoBehaviour
 
         hiroyukiCat =  GameObject.Find("HiroyukiCat");
         hiroyukiCat.gameObject.SetActive(false);
+    }
+
+    public void Connect()
+    {
+        if (isOnline)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            PhotonNetwork.OfflineMode = true;
+        }
+    }
+
+    public void DisConnect()
+    {
+        if (isOnline)
+        {
+            PhotonNetwork.Disconnect();
+        }
+        else
+        {
+            PhotonNetwork.OfflineMode = false;
+        }
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinRandomRoom();
+
+    }
+
+    public override void OnJoinedRoom()
+    {
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
+        {
+            Vector3 playerPos = new Vector3(0, 8.5f, 0);
+            PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
+        }
+        else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
+        {
+            Vector3 playerPos = new Vector3(0, 3f, 8);
+            Quaternion rotate = new Quaternion(90, 0, 0, 0);
+            PhotonNetwork.Instantiate("Player2", playerPos, rotate);
+        }
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 2;
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
 
     // Update is called once per frame

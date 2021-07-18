@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FauxGravityBody : MonoBehaviour
 {
+    GameObject planet;
     public FauxGravityAttractor attractor;
     private Transform myTransform;
     Rigidbody rigidbody;
@@ -11,6 +12,9 @@ public class FauxGravityBody : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        planet = GameObject.Find("Planet");
+        attractor = planet.GetComponent<FauxGravityAttractor>();
+
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         rigidbody.useGravity = false;

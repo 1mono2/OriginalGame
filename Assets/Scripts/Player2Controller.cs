@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
-public class Player2Controller : MonoBehaviour
+public class Player2Controller : MonoBehaviourPunCallbacks
 {
     public float moveSpeed = 5;
     private Vector3 moveDir;
     Rigidbody rigidbody;
+
+    // Objects
     public GameObject planet;
     public GameObject gameobjController;
     GameController gameController;
-
-    GameObject astronaut;
+    [SerializeField]
+    private GameObject astronaut;
     Animator animator;
 
     GameObject UniCat;
@@ -22,9 +25,10 @@ public class Player2Controller : MonoBehaviour
     {
         
         rigidbody = GetComponent<Rigidbody>();
+        planet = GameObject.Find("Planet");
+        gameobjController = GameObject.Find("GameController");
         gameController = gameobjController.GetComponent<GameController>();
 
-        astronaut = GameObject.Find("Player2/Astronaut");
         animator = astronaut.GetComponent<Animator>();
         // ‰F’ˆ”L
         UniCat = GameObject.Find("UniverseCat");
@@ -35,7 +39,7 @@ public class Player2Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameController.isBattling == true)
+        if (gameController.isBattling == true && photonView.IsMine)
         {
             float h = Input.GetAxisRaw("Player2Horizontal");
             float v = Input.GetAxisRaw("Player2Vertical");
