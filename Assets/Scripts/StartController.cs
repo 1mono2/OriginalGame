@@ -17,15 +17,12 @@ public class StartController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown)
-        {
-            StartCoroutine(LoadGame());
-        }
+     
     }
 
-    private IEnumerator LoadGame()
+    private void LoadGame()
     {
-        yield return new WaitForSeconds(0.5f);
+
         SceneManager.LoadScene(mainGame);
     }
 }

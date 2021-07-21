@@ -16,7 +16,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject spawner;
     SpawnerScript spawnerScript;
     public Camera cameraParticle;
-   
+    IntegratedManager integratedManager;
 
     [SceneName]
     public string resultSceneSeeker;
@@ -30,16 +30,18 @@ public class GameController : MonoBehaviourPunCallbacks
     GameObject hiroyukiCat;
     GameObject UniCat;
 
-    private bool isOnline = true;
-
     // Start is called before the first frame update
     void Start()
     {
+        integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         Connect();
 
         playerController = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<Player2Controller>();
         spawnerScript = spawner.GetComponent<SpawnerScript>();
+        
+        // SceneManager.MoveGameObjectToScene(IntegratedManager, SceneManager.GetActiveScene());
+       
         isBattling = false;
 
         // hiroyuki Cat
@@ -48,11 +50,13 @@ public class GameController : MonoBehaviourPunCallbacks
         // ‰F’ˆ”L
         UniCat = GameObject.Find("UniverseCat");
         UniCat.gameObject.SetActive(false);
+
+        
     }
 
     public void Connect()
     {
-        if (isOnline)
+        if (integratedManager.isOnline)
         {
             PhotonNetwork.ConnectUsingSettings();
             Debug.Log("Online Now!");
@@ -66,7 +70,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void DisConnect()
     {
-        if (isOnline)
+        if (integratedManager.isOnline)
         {
             PhotonNetwork.Disconnect();
         }
@@ -84,7 +88,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        if (isOnline == true) {
+        if (integratedManager.isOnline == true) {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
                 Vector3 playerPos = new Vector3(0, 8.5f, 0);
