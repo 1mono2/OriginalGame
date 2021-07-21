@@ -32,7 +32,6 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         animator = astronaut.GetComponent<Animator>();
         // ‰F’ˆ”L
         UniCat = GameObject.Find("UniverseCat");
-        UniCat.gameObject.SetActive(false);
 
     }
 

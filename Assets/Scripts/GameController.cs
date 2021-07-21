@@ -28,8 +28,9 @@ public class GameController : MonoBehaviourPunCallbacks
     public bool isBattling;
 
     GameObject hiroyukiCat;
+    GameObject UniCat;
 
-    public bool isOnline = true;
+    private bool isOnline = true;
 
     // Start is called before the first frame update
     void Start()
@@ -41,8 +42,12 @@ public class GameController : MonoBehaviourPunCallbacks
         spawnerScript = spawner.GetComponent<SpawnerScript>();
         isBattling = false;
 
+        // hiroyuki Cat
         hiroyukiCat =  GameObject.Find("HiroyukiCat");
         hiroyukiCat.gameObject.SetActive(false);
+        // ‰F’ˆ”L
+        UniCat = GameObject.Find("UniverseCat");
+        UniCat.gameObject.SetActive(false);
     }
 
     public void Connect()
@@ -50,10 +55,12 @@ public class GameController : MonoBehaviourPunCallbacks
         if (isOnline)
         {
             PhotonNetwork.ConnectUsingSettings();
+            Debug.Log("Online Now!");
         }
         else
         {
             PhotonNetwork.OfflineMode = true;
+            Debug.Log("Offline Now!");
         }
     }
 
@@ -72,27 +79,35 @@ public class GameController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinRandomRoom();
-
+        // PhotonNetwork.NetworkingClient.OpJoinRandomOrCreateRoom(null, null); RandomRoom or CreateRoom
     }
 
     public override void OnJoinedRoom()
     {
+        if (isOnline == true) {
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
+            {
+                Vector3 playerPos = new Vector3(0, 8.5f, 0);
+                PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
+            }
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
+            {
+                Vector3 playerPos = new Vector3(0, 3f, 8);
+                Quaternion rotate = new Quaternion(90, 0, 0, 0);
+                PhotonNetwork.Instantiate("Player2", playerPos, rotate);
+            }
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
-        {
-            Vector3 playerPos = new Vector3(0, 8.5f, 0);
-            PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
-        }
-        else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
-        {
-            Vector3 playerPos = new Vector3(0, 3f, 8);
+            if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+            }
+        }else{
+            Vector3 player1Pos = new Vector3(0, 8.5f, 0);
+            PhotonNetwork.Instantiate("Player", player1Pos, Quaternion.identity);
+
+            Vector3 player2Pos = new Vector3(0, 3f, 8);
             Quaternion rotate = new Quaternion(90, 0, 0, 0);
-            PhotonNetwork.Instantiate("Player2", playerPos, rotate);
-        }
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.Instantiate("Player2", player2Pos, rotate);
         }
     }
 
