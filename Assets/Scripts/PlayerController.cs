@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -17,6 +19,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject cat;
     Animator animator;
+  
+
+    
 
     private void Start()
     {
@@ -32,7 +37,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (gameController.isBattling == true && photonView.IsMine)
+        if (gameController.isBattling == true && photonView.IsMine )
         {
             float h = Input.GetAxisRaw("Player1Horizontal");
             float v = Input.GetAxisRaw("Player1Vertical");
@@ -139,6 +144,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Vector3 scaleUpPos = transform.position * (afterScale / beforeScale);
         rigidbody.MovePosition(scaleUpPos);
     }
+
+   
 
    
 }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class IntegratedManager : MonoBehaviour
 {
-    public  bool  isOnline;
+    public bool isOnline;
     [SceneName]
     public string mainBattle;
    

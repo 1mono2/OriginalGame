@@ -5,6 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
+
+/// <summary>
+/// プレイヤーがReady状態か判定するのは上手くいったと思う。
+/// 後は、ボタンに作って、Ready状態をいじれるようにする。
+/// </summary>
 
 public class GameController : MonoBehaviourPunCallbacks
 {
@@ -17,6 +23,7 @@ public class GameController : MonoBehaviourPunCallbacks
     SpawnerScript spawnerScript;
     public Camera cameraParticle;
     IntegratedManager integratedManager;
+    
 
     [SceneName]
     public string resultSceneSeeker;
@@ -30,10 +37,23 @@ public class GameController : MonoBehaviourPunCallbacks
     GameObject hiroyukiCat;
     GameObject UniCat;
 
+    // Photon Instance
+    bool readyAllplayers = false;
+    Photon.Realtime.Player[] players;
+    // temporary
+    // public GameObject IntegratedManager;
+
+   
+
     // Start is called before the first frame update
     void Start()
     {
+        // temporary
+        // Instantiate(IntegratedManager);
+
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        // 一時的にtrue Mainから起動するため
+        // integratedManager.isOnline = true;
         Connect();
 
         playerController = player1.GetComponent<PlayerController>();
@@ -51,9 +71,34 @@ public class GameController : MonoBehaviourPunCallbacks
         UniCat = GameObject.Find("UniverseCat");
         UniCat.gameObject.SetActive(false);
 
-        
+       
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if (!readyAllplayers)
+        {
+            readyAllplayers = CheckReadyStateAllPlayers();
+        }
+        
+
+        if (isBattling == true && readyAllplayers == true)
+        {
+            if (time <= 0)
+            {
+
+                hiroyukiCat.SetActive(true);
+                StartCoroutine(LoadResulEscapeet());
+            }
+            else
+            {
+                time -= Time.deltaTime;
+            }
+        }
+    }
+
+    // Photon
     public void Connect()
     {
         if (integratedManager.isOnline)
@@ -105,7 +150,9 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
             }
-        }else{
+
+        }
+        else{  // Offline
             Vector3 player1Pos = new Vector3(0, 8.5f, 0);
             PhotonNetwork.Instantiate("Player", player1Pos, Quaternion.identity);
 
@@ -122,24 +169,7 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
 
-    // Update is called once per frame
-    void  Update()
-    {
-        if (isBattling == true)
-        { 
-            if(time <= 0)
-            {
-                
-                hiroyukiCat.SetActive(true);
-                StartCoroutine(LoadResulEscapeet());
-            }
-            else
-            {
-                time -= Time.deltaTime;
-            }
-        }
-    }
-
+   // Sceane
     public IEnumerator LoadResult ()
     {
         yield return new WaitForSeconds(2f);
@@ -188,4 +218,48 @@ public class GameController : MonoBehaviourPunCallbacks
         cameraParticle.gameObject.SetActive(false);
     }
 
+    // Photon
+    public void SetReadyStateToTrue()
+    {
+        PhotonNetwork.LocalPlayer.SetReadyStateToTrue();
+        Debug.Log("Set Ready!");
+    }
+
+    public IEnumerator CoroutineCheckReadyStateAllPlayers()
+    {
+        while (!readyAllplayers)
+        {
+            readyAllplayers = CheckReadyStateAllPlayers();
+        }
+        Debug.Log("All Player Ready.");
+        yield return null;
+    }
+
+    public bool CheckReadyStateAllPlayers()
+    {
+        if (!PhotonNetwork.InRoom) { return false; }
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            players = PhotonNetwork.PlayerList;
+            bool[] state = new bool[2];
+            for (int i = 0; i < state.Length; i++)
+            {
+                state[i] = players[i].GetReadyState();
+            }
+
+            if (state.All(i => i == true))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
