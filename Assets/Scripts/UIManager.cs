@@ -6,33 +6,48 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     GameController gameController;
+    IntegratedManager integratedManager;
     public Text timeText;
     public Text countDownText;
     public Canvas explain;
 
-    bool getKey;
+    bool onetime;
     // Start is called before the first frame update
     void Start()
     {
         gameController = GetComponent<GameController>();
-        getKey = true;
+        integratedManager = integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        onetime = true;
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameController.isBattling == false & getKey ==true)
+
+        if (integratedManager.isOnline)
         {
-            if (Input.anyKeyDown)
+            if (gameController.isBattling == false & onetime == true & gameController.readyAllplayers == true)
             {
                 explain.gameObject.SetActive(false);
                 StartCoroutine(CountDown());
-                getKey = false;
+                onetime = false;
+            }
+
+            }
+        else
+        {
+            if (gameController.isBattling == false & onetime == true)
+            {
+                if (Input.anyKey) {
+                    explain.gameObject.SetActive(false);
+                    StartCoroutine(CountDown());
+                    onetime = false;
+                }
             }
         }
 
-        timeText.text = gameController.time.ToString("f1");
+        timeText.text = gameController.time.ToString("f0");
 
         
     }

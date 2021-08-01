@@ -38,7 +38,7 @@ public class GameController : MonoBehaviourPunCallbacks
     GameObject UniCat;
 
     // Photon Instance
-    bool readyAllplayers = false;
+    public bool readyAllplayers = false;
     Photon.Realtime.Player[] players;
     // temporary
     // public GameObject IntegratedManager;
@@ -77,23 +77,42 @@ public class GameController : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (!readyAllplayers)
+        if (integratedManager.isOnline)
         {
-            readyAllplayers = CheckReadyStateAllPlayers();
-        }
-        
-
-        if (isBattling == true && readyAllplayers == true)
-        {
-            if (time <= 0)
+            if (!readyAllplayers)
             {
-
-                hiroyukiCat.SetActive(true);
-                StartCoroutine(LoadResulEscapeet());
+                readyAllplayers = CheckReadyStateAllPlayers();
             }
-            else
+
+
+            if (isBattling == true && readyAllplayers == true)
             {
-                time -= Time.deltaTime;
+                if (time <= 0)
+                {
+
+                    hiroyukiCat.SetActive(true);
+                    StartCoroutine(LoadResulEscapee());
+                }
+                else
+                {
+                    time -= Time.deltaTime;
+                }
+            }
+        }
+        else
+        {
+            if (isBattling == true)
+            {
+                if (time <= 0)
+                {
+
+                    hiroyukiCat.SetActive(true);
+                    StartCoroutine(LoadResulEscapee());
+                }
+                else
+                {
+                    time -= Time.deltaTime;
+                }
             }
         }
     }
@@ -106,7 +125,7 @@ public class GameController : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
             Debug.Log("Online Now!");
         }
-        else
+        else  //offline
         {
             PhotonNetwork.OfflineMode = true;
             Debug.Log("Offline Now!");
@@ -176,7 +195,7 @@ public class GameController : MonoBehaviourPunCallbacks
         SceneManager.LoadScene(resultSceneSeeker);
     }
 
-    public IEnumerator LoadResulEscapeet()
+    public IEnumerator LoadResulEscapee()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneEscapee);
@@ -219,7 +238,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     // Photon
-    public void SetReadyStateToTrue()
+    public void SetReadyStateToTrue()  //Refer to UI button
     {
         PhotonNetwork.LocalPlayer.SetReadyStateToTrue();
         Debug.Log("Set Ready!");
@@ -239,27 +258,23 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.InRoom) { return false; }
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        {
-            players = PhotonNetwork.PlayerList;
-            bool[] state = new bool[2];
-            for (int i = 0; i < state.Length; i++)
-            {
-                state[i] = players[i].GetReadyState();
-            }
+        if (PhotonNetwork.CurrentRoom.PlayerCount != 2){ return false; }
 
-            if (state.All(i => i == true))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        players = PhotonNetwork.PlayerList;
+        bool[] state = new bool[2];
+        for (int i = 0; i < state.Length; i++)
+        {
+            state[i] = players[i].GetReadyState();
+        }
+
+        if (state.All(i => i == true))
+        {
+            return true;
         }
         else
         {
             return false;
         }
+
     }
 }
