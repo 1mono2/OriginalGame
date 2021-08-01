@@ -91,7 +91,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 {
 
                     hiroyukiCat.SetActive(true);
-                    StartCoroutine(LoadResulEscapee());
+                    StartCoroutine(LoadResulEscapeeWin());
                 }
                 else
                 {
@@ -107,7 +107,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 {
 
                     hiroyukiCat.SetActive(true);
-                    StartCoroutine(LoadResulEscapee());
+                    StartCoroutine(LoadResulEscapeeWin());
                 }
                 else
                 {
@@ -189,18 +189,25 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
    // Sceane
-    public IEnumerator LoadResult ()
+    public IEnumerator LoadResultSeekerWin ()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneSeeker);
     }
 
-    public IEnumerator LoadResulEscapee()
+    public IEnumerator LoadResulEscapeeWin()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneEscapee);
     }
 
+    public void SetUniCat()
+    {
+        UniCat.gameObject.SetActive(true);
+        StartCoroutine(LoadResultSeekerWin());
+    }
+
+    // Pos moving
     public void P1MoveUpDownPos(float beforeScale, float afterScale)
     {
         playerController.MoveUpDownPos(beforeScale, afterScale);

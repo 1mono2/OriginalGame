@@ -20,6 +20,18 @@ public class Player2Controller : MonoBehaviourPunCallbacks
 
     GameObject UniCat;
 
+    private void Awake()
+    {
+        if (photonView.IsMine)
+        {
+            GameObject onlineCameraPrefab = (GameObject)Resources.Load("OnlineCamera");
+            Vector3 camPos = new Vector3(0, -6.75f, 0.05f) + this.gameObject.transform.position;
+            Quaternion camRotate = Quaternion.Euler(-90, 180, 0);
+            GameObject onlineCamera = Instantiate(onlineCameraPrefab, camPos, camRotate);
+            onlineCamera.transform.parent = this.gameObject.transform;
+        }
+
+    }
 
     private void Start()
     {
@@ -95,8 +107,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     {
         if(collision.gameObject.tag == "escapee")
         {
-            UniCat.gameObject.SetActive(true);
-            StartCoroutine(gameController.LoadResult());
+            gameController.SetUniCat();
         }
     }
 
