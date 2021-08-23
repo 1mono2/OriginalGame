@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerScript : MonoBehaviour
+public class SpawnerMove : MonoBehaviour
 {
-    public GameObject[] items;
-    public GameObject gameObjController;
-    public GameController gameController;
+   
+    private GameObject gameControllerObj;
+    private GameController gameController;
     Rigidbody rigidbody;
-    public GameObject planet;
+    private GameObject planet;
 
     public float timeleft = 0.0f;
     public float defaltTimeLeft = 3.0f;
-    public float itemInterval = 7f; 
+    
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        gameController = gameObjController.GetComponent<GameController>();
-        StartCoroutine(ExistCheckAndGenerate());
+        gameControllerObj = GameObject.Find("GameController");
+        gameController = gameControllerObj.GetComponent<GameController>();
+
+        planet = GameObject.Find("Planet");
 
     }
 
@@ -39,22 +41,6 @@ public class SpawnerScript : MonoBehaviour
         
     }
 
-    IEnumerator ExistCheckAndGenerate()
-    {
-        if (gameController.isBattling == true) { 
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-                GameObject item = GameObject.FindGameObjectWithTag("Item");
-               if(item == null)
-                {
-                    yield return new WaitForSeconds(itemInterval);
-                    Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
-                }
-           
-            }
-        }
-    }
 
     public void Warp()
     {

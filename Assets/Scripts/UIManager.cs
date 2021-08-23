@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         gameController = GetComponent<GameController>();
-        integratedManager = integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         onetime = true;
         
     }

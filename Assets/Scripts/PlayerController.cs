@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             float h = Input.GetAxisRaw("Player1Horizontal");
             float v = Input.GetAxisRaw("Player1Vertical");
             moveDir = new Vector3(h, 0, v).normalized;
-           // animator.SetInteger("Walking", 0);
+            animator.SetInteger("Walking", 0);
             if (h != 0 | v != 0)
             {
                 animator.SetInteger("Walking", 1);

@@ -8,8 +8,7 @@ using Photon.Realtime;
 using System.Linq;
 
 /// <summary>
-/// プレイヤーがReady状態か判定するのは上手くいったと思う。
-/// 後は、ボタンに作って、Ready状態をいじれるようにする。
+/// 
 /// </summary>
 
 public class GameController : MonoBehaviourPunCallbacks
@@ -20,7 +19,7 @@ public class GameController : MonoBehaviourPunCallbacks
     PlayerController playerController;
     Player2Controller player2Controller;
     public GameObject spawner;
-    SpawnerScript spawnerScript;
+    SpawnerMove spawnerMove;
     public Camera cameraParticle;
     IntegratedManager integratedManager;
     
@@ -40,29 +39,19 @@ public class GameController : MonoBehaviourPunCallbacks
     // Photon Instance
     public bool readyAllplayers = false;
     Photon.Realtime.Player[] players;
-    // temporary
-    // public GameObject IntegratedManager;
+
 
    
 
     // Start is called before the first frame update
     void Start()
     {
-        // temporary
-        // Instantiate(IntegratedManager);
-
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
-        // 一時的にtrue Mainから起動するため
-        // integratedManager.isOnline = true;
         Connect();
 
         playerController = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<Player2Controller>();
-        spawnerScript = spawner.GetComponent<SpawnerScript>();
-        
-        // SceneManager.MoveGameObjectToScene(IntegratedManager, SceneManager.GetActiveScene());
-       
-        isBattling = false;
+        spawnerMove = spawner.GetComponent<SpawnerMove>();
 
         // hiroyuki Cat
         hiroyukiCat =  GameObject.Find("HiroyukiCat");
@@ -71,7 +60,10 @@ public class GameController : MonoBehaviourPunCallbacks
         UniCat = GameObject.Find("UniverseCat");
         UniCat.gameObject.SetActive(false);
 
-       
+        isBattling = false;
+
+
+
     }
 
     // Update is called once per frame
@@ -89,9 +81,7 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 if (time <= 0)
                 {
-
-                    hiroyukiCat.SetActive(true);
-                    StartCoroutine(LoadResulEscapeeWin());
+                    SetHiroCat();
                 }
                 else
                 {
@@ -99,15 +89,14 @@ public class GameController : MonoBehaviourPunCallbacks
                 }
             }
         }
-        else
+        else //offline
         {
             if (isBattling == true)
             {
                 if (time <= 0)
                 {
-
-                    hiroyukiCat.SetActive(true);
-                    StartCoroutine(LoadResulEscapeeWin());
+                    SetHiroCat();
+                   
                 }
                 else
                 {
@@ -120,6 +109,8 @@ public class GameController : MonoBehaviourPunCallbacks
     // Photon
     public void Connect()
     {
+        
+        Debug.Log(integratedManager.isOnline);
         if (integratedManager.isOnline)
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -156,13 +147,17 @@ public class GameController : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
                 Vector3 playerPos = new Vector3(0, 8.5f, 0);
-                PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
+                PhotonNetwork.Instantiate(player1.gameObject.name, playerPos, Quaternion.identity);
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
             {
                 Vector3 playerPos = new Vector3(0, 3f, 8);
                 Quaternion rotate = new Quaternion(90, 0, 0, 0);
-                PhotonNetwork.Instantiate("Player2", playerPos, rotate);
+                PhotonNetwork.Instantiate(player2.gameObject.name, playerPos, rotate);
+
+
+                Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
+                PhotonNetwork.Instantiate(spawner.gameObject.name, spawnerPos, Quaternion.identity);
             }
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -173,11 +168,14 @@ public class GameController : MonoBehaviourPunCallbacks
         }
         else{  // Offline
             Vector3 player1Pos = new Vector3(0, 8.5f, 0);
-            PhotonNetwork.Instantiate("Player", player1Pos, Quaternion.identity);
+            PhotonNetwork.Instantiate(player1.gameObject.name, player1Pos, Quaternion.identity);
 
             Vector3 player2Pos = new Vector3(0, 3f, 8);
             Quaternion rotate = new Quaternion(90, 0, 0, 0);
-            PhotonNetwork.Instantiate("Player2", player2Pos, rotate);
+            PhotonNetwork.Instantiate(player2.gameObject.name, player2Pos, rotate);
+
+            Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
+            PhotonNetwork.Instantiate(spawner.gameObject.name, spawnerPos, Quaternion.identity);
         }
     }
 
@@ -201,10 +199,18 @@ public class GameController : MonoBehaviourPunCallbacks
         SceneManager.LoadScene(resultSceneEscapee);
     }
 
+    public void SetHiroCat()
+    {
+        hiroyukiCat.SetActive(true);
+        StartCoroutine(LoadResulEscapeeWin());
+        DisConnect();
+    }
+
     public void SetUniCat()
     {
         UniCat.gameObject.SetActive(true);
         StartCoroutine(LoadResultSeekerWin());
+        DisConnect();
     }
 
     // Pos moving
@@ -221,7 +227,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void SpawnerMoveUpDownPos(float beforeScale, float afterScale)
     {
-        spawnerScript.MoveUpDownPos(beforeScale, afterScale);
+        spawnerMove.MoveUpDownPos(beforeScale, afterScale);
     }
 
     // speedUpItem
@@ -239,6 +245,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    // Particle
     public void FinishingParticle()
     {
         cameraParticle.gameObject.SetActive(false);
