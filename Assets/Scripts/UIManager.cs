@@ -62,5 +62,6 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         countDownText.text = "";
         gameController.isBattling = true;
+        gameController.SetStartTime();
     }
 }

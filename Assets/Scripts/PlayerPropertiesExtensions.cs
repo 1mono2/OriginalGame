@@ -5,6 +5,7 @@ public static class PlayerPropertiesExtensions
 {
 
     private const string ReadyState = "ReadyState";
+    private const string StartTime = "StartTime";
     private static readonly Hashtable propsToSet = new Hashtable();
     
 
@@ -24,6 +25,27 @@ public static class PlayerPropertiesExtensions
     {
         propsToSet[ReadyState] = false;
         player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    public static bool TryGetStartTime(this Room room, out int timestamp)
+    {
+        if(room.CustomProperties[StartTime]  is int value)
+        {
+            timestamp = value;
+            return true;
+        }
+        else
+        {
+            timestamp = 0;
+            return false;
+        }
+    }
+
+    public static void SetStartTime(this Room room, int timestamp)
+    {
+        propsToSet[StartTime] = timestamp;
+        room.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }
 

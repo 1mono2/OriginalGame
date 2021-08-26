@@ -40,6 +40,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public string resultSceneEscapee;
 
     public float time = 60.0f;
+    public float defaulTime = 60.0f;
 
     public bool isBattling;
 
@@ -108,14 +109,18 @@ public class GameController : MonoBehaviourPunCallbacks
 
             if (isBattling == true && readyAllplayers == true)
             {
+                if(!PhotonNetwork.CurrentRoom.TryGetStartTime(out int timestamp)) { return; }
+
+                float elapsedTime = Mathf.Max(0f, unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000f);
+                time = defaulTime - elapsedTime;
+                Debug.Log(elapsedTime);
+                Debug.Log(time);
                 if (time <= 0)
                 {
+                    Debug.Log("Lose Seeker");
                     SetHiroCat();
                 }
-                else
-                {
-                    time -= Time.deltaTime;
-                }
+                
             }
         }
         else //offline
@@ -225,6 +230,14 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
 
+
+    // Time
+    public void SetStartTime() {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.SetStartTime(PhotonNetwork.ServerTimestamp);
+        }
+    }
 
     // Sceane
     public IEnumerator LoadResultSeekerWin()
