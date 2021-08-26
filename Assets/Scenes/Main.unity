@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 265378634}
   m_Layer: 0
   m_Name: Planet
-  m_TagString: Untagged
+  m_TagString: planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7498,13 +7498,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670decac1d128cb4785070d6152b0cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 3115323763401491366, guid: 0dda9a19285bb4347900f831e714e2aa, type: 3}
-  player2: {fileID: 4808860843445391152, guid: e91ee74c927b68b4797adc85cdaf9f09, type: 3}
-  spawner: {fileID: 3021420115017560251, guid: 3375320fad312f446a37afa2b13f40e1, type: 3}
+  player1Prefab: {fileID: 3115323763401491366, guid: 0dda9a19285bb4347900f831e714e2aa, type: 3}
+  player2Prefab: {fileID: 4808860843445391152, guid: e91ee74c927b68b4797adc85cdaf9f09, type: 3}
+  spawnerPrefab: {fileID: 3021420115017560251, guid: 3375320fad312f446a37afa2b13f40e1, type: 3}
   cameraParticle: {fileID: 326716109}
   resultSceneSeeker: ResultSeeker
   resultSceneEscapee: ResultEscapee
-  time: 10
+  time: 90
   isBattling: 0
   readyAllplayers: 0
 --- !u!4 &1324666658

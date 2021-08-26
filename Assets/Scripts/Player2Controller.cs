@@ -11,8 +11,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     Rigidbody rigidbody;
 
     // Objects
-    public GameObject planet;
-    public GameObject gameobjController;
+    GameObject planet;
     GameController gameController;
     [SerializeField]
     private GameObject astronaut;
@@ -37,9 +36,8 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     {
         
         rigidbody = GetComponent<Rigidbody>();
-        planet = GameObject.Find("Planet");
-        gameobjController = GameObject.Find("GameController");
-        gameController = gameobjController.GetComponent<GameController>();
+        planet = GameObject.FindWithTag("planet");
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
         animator = astronaut.GetComponent<Animator>();
         // ‰F’ˆ”L
@@ -128,7 +126,6 @@ public class Player2Controller : MonoBehaviourPunCallbacks
 
     public void Warp()
     {
-
         SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
         Vector3 randomPos = GetPosition(Random.Range(0, 360), Random.Range(0, 360),
             planetCollider.radius * (planet.transform.localScale.x - 1));

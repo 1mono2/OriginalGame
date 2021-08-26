@@ -13,13 +13,18 @@ using System.Linq;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
- 
-    public GameObject player1;
-    public GameObject player2;
+    // resources in photon folder
+    public GameObject player1Prefab;
+    public GameObject player2Prefab;
+    GameObject player1;
+    GameObject player2;
     PlayerController playerController;
     Player2Controller player2Controller;
-    public GameObject spawner;
+    
+    public GameObject spawnerPrefab;
+    GameObject spawner;
     SpawnerMove spawnerMove;
+
     public Camera cameraParticle;
     IntegratedManager integratedManager;
     
@@ -49,9 +54,7 @@ public class GameController : MonoBehaviourPunCallbacks
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         Connect();
 
-        playerController = player1.GetComponent<PlayerController>();
-        player2Controller = player2.GetComponent<Player2Controller>();
-        spawnerMove = spawner.GetComponent<SpawnerMove>();
+      
 
         // hiroyuki Cat
         hiroyukiCat =  GameObject.Find("HiroyukiCat");
@@ -147,17 +150,21 @@ public class GameController : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
                 Vector3 playerPos = new Vector3(0, 8.5f, 0);
-                PhotonNetwork.Instantiate(player1.gameObject.name, playerPos, Quaternion.identity);
+                player1 =  PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+                playerController = player1.GetComponent<PlayerController>();
+
+                Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
+                spawner =  PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+                spawnerMove = spawner.GetComponent<SpawnerMove>();
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
             {
-                Vector3 playerPos = new Vector3(0, 3f, 8);
+                Vector3 player2Pos = new Vector3(0, 3f, 8);
                 Quaternion rotate = new Quaternion(90, 0, 0, 0);
-                PhotonNetwork.Instantiate(player2.gameObject.name, playerPos, rotate);
+                player2 =  PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);                
+                player2Controller = player2.GetComponent<Player2Controller>();
 
 
-                Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-                PhotonNetwork.Instantiate(spawner.gameObject.name, spawnerPos, Quaternion.identity);
             }
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -167,15 +174,18 @@ public class GameController : MonoBehaviourPunCallbacks
 
         }
         else{  // Offline
-            Vector3 player1Pos = new Vector3(0, 8.5f, 0);
-            PhotonNetwork.Instantiate(player1.gameObject.name, player1Pos, Quaternion.identity);
+            Vector3 playerPos = new Vector3(0, 8.5f, 0);
+            player1 = PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+            playerController = player1.GetComponent<PlayerController>();
 
             Vector3 player2Pos = new Vector3(0, 3f, 8);
             Quaternion rotate = new Quaternion(90, 0, 0, 0);
-            PhotonNetwork.Instantiate(player2.gameObject.name, player2Pos, rotate);
+            player2 = PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);
+            player2Controller = player2.GetComponent<Player2Controller>();
 
             Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-            PhotonNetwork.Instantiate(spawner.gameObject.name, spawnerPos, Quaternion.identity);
+            spawner = PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+            spawnerMove = spawner.GetComponent<SpawnerMove>();
         }
     }
 
@@ -245,11 +255,23 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    // Particle
     public void FinishingParticle()
     {
         cameraParticle.gameObject.SetActive(false);
     }
+
+    // Warp Item
+    public void P1Warp()
+    {
+        playerController.Warp();
+    }
+
+    public void P2Warp()
+    {
+        player2Controller.Warp();
+
+    }
+
 
     // Photon
     public void SetReadyStateToTrue()  //Refer to UI button

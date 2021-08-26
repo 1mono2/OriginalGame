@@ -38,6 +38,10 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - RPCTryGetItemWarp
+  - RPCCheckAcaulable
+  - DestroyItemOnLocal
+  - RPCCheckAvailable
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

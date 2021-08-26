@@ -188,8 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  planet: {fileID: 0}
-  gameobjController: {fileID: 0}
   astronaut: {fileID: 4808860841949261375}
 --- !u!114 &4442413418133828367
 MonoBehaviour:

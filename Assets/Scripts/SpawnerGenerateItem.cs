@@ -20,25 +20,23 @@ public class SpawnerGenerateItem : MonoBehaviourPunCallbacks
         StartCoroutine(ItemSearchExistenceAndGenerate());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     IEnumerator ItemSearchExistenceAndGenerate()
     {
-        yield return new WaitForSeconds(1);  // search items per 1seconds
-        if (gameController.isBattling == true)
+        while (true)
         {
-            GameObject item = GameObject.FindGameObjectWithTag("Item");
-            if (item == null)
-            {
-                yield return new WaitForSeconds(itemInterval);
-                // Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
-                PhotonNetwork.Instantiate(items[Random.Range(0, items.Length)].gameObject.name, this.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(1);  // search items per 1seconds
+           if (gameController.isBattling == true && photonView.IsMine)
+             {
+            
+                GameObject item = GameObject.FindGameObjectWithTag("Item");
+                if (item == null)
+                {
+                    yield return new WaitForSeconds(itemInterval);
+                    // Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
+                    PhotonNetwork.Instantiate(items[Random.Range(0, items.Length)].gameObject.name, this.transform.position, Quaternion.identity);
+                }
             }
-
 
         }
     }

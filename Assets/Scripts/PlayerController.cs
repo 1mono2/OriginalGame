@@ -157,7 +157,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         rigidbody.MovePosition(scaleUpPos);
     }
 
-   
 
    
 }
