@@ -1,33 +1,81 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlanetScaleChange : MonoBehaviour
+public class PlanetScaleChange : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
-    void Start()
+    bool isAvailable;
+    GameController gameController;
+
+    private void Awake()
     {
-        
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        isAvailable = true;
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void OnTriggerEnter(Collider collider)
     {
-        
+        string tag = collider.gameObject.tag;
+        photonView.RPC(nameof(RPCCheckAvailable), RpcTarget.AllViaServer, tag);
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    [PunRPC]
+    void RPCCheckAvailable(string tag, PhotonMessageInfo info)
     {
-        if (other.gameObject.tag == "escapee")
+        if (tag == "escapee")
         {
-            other.gameObject.SendMessage("PlanetScaleUp");
-            Destroy(this.gameObject);
+            if (isAvailable)
+            {
+                isAvailable = false;
+                if (info.Sender.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+
+                    gameController.PlanetScaleUp();
+                    if (photonView.IsMine)
+                    {
+                        Debug.Log("1p destroys item");
+                        photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
+                    }
+                    else
+                    {
+                        Debug.Log("1p doesnt have ownership");
+                        photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
+                    }
+                }
+            }
         }
 
-        if (other.gameObject.tag == "seeker")
+        if (tag == "seeker")
         {
-            other.gameObject.SendMessage("PlanetScaleDown");
-            Destroy(this.gameObject);
+            if (isAvailable)
+            {
+                isAvailable = false;
+                if (info.Sender.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+
+                    gameController.PlanetScaleDown();
+                    if (photonView.IsMine)
+                    {
+                        Debug.Log("2p has ownership and destroys item");
+                        photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
+                    }
+                    else
+                    {
+                        Debug.Log("2p doesnt have ownership.");
+                        photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
+                    }
+                }
+            }
         }
+    }
+
+    [PunRPC]
+    public void DestroyItemOnLocal()
+    {
+        Destroy(this.gameObject);
     }
 }

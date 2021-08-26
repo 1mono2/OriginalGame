@@ -20,14 +20,19 @@ public class GameController : MonoBehaviourPunCallbacks
     GameObject player2;
     PlayerController playerController;
     Player2Controller player2Controller;
-    
+
     public GameObject spawnerPrefab;
     GameObject spawner;
     SpawnerMove spawnerMove;
 
+    GameObject planet;
+    Vector3 planetDefaultScale = new Vector3(15, 15, 15);
+    Vector3 planetScaleUp = new Vector3(20, 20, 20);
+    Vector3 planetScaleDown = new Vector3(10, 10, 10);
+
     public Camera cameraParticle;
     IntegratedManager integratedManager;
-    
+
 
     [SceneName]
     public string resultSceneSeeker;
@@ -46,7 +51,7 @@ public class GameController : MonoBehaviourPunCallbacks
     Photon.Realtime.Player[] players;
 
 
-   
+
 
     // Start is called before the first frame update
     void Start()
@@ -54,10 +59,10 @@ public class GameController : MonoBehaviourPunCallbacks
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         Connect();
 
-      
+        planet = GameObject.Find("Planet");
 
         // hiroyuki Cat
-        hiroyukiCat =  GameObject.Find("HiroyukiCat");
+        hiroyukiCat = GameObject.Find("HiroyukiCat");
         hiroyukiCat.gameObject.SetActive(false);
         // âFíàîL
         UniCat = GameObject.Find("UniverseCat");
@@ -74,9 +79,30 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (integratedManager.isOnline)
         {
-            if (!readyAllplayers)
+            // ÉvÉåÉCÉÑÅ[Ç™óéÇøÇΩÇ∆Ç´Ç«Ç§Ç∑ÇÈÇ©
+            if (readyAllplayers == false || playerController == null || player2Controller == null || spawnerMove == null)
             {
                 readyAllplayers = CheckReadyStateAllPlayers();
+                player1 = GameObject.FindWithTag("escapee");
+                if (player1)
+                {
+                    
+                    playerController = player1.GetComponent<PlayerController>();
+                    //Debug.Log(string.Format("{0}, is playerController", playerController));
+                }
+                player2 = GameObject.FindWithTag("seeker");
+                if (player2)
+                { 
+                    player2Controller = player2.GetComponent<Player2Controller>();
+                    //Debug.Log(string.Format("{0}, is player2Controller", player2Controller));
+                }
+                spawner = GameObject.FindWithTag("Respawn");
+                
+                if (spawner)
+                {
+                    spawnerMove = spawner.GetComponent<SpawnerMove>();
+                    //Debug.Log(string.Format("{0}, is respawn", spawnerMove));
+                }
             }
 
 
@@ -99,7 +125,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 if (time <= 0)
                 {
                     SetHiroCat();
-                   
+
                 }
                 else
                 {
@@ -112,8 +138,7 @@ public class GameController : MonoBehaviourPunCallbacks
     // Photon
     public void Connect()
     {
-        
-        Debug.Log(integratedManager.isOnline);
+
         if (integratedManager.isOnline)
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -146,22 +171,25 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        if (integratedManager.isOnline == true) {
+        if (integratedManager.isOnline == true)
+        {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
                 Vector3 playerPos = new Vector3(0, 8.5f, 0);
-                player1 =  PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+                player1 = PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
                 playerController = player1.GetComponent<PlayerController>();
 
                 Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-                spawner =  PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+                spawner = PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
                 spawnerMove = spawner.GetComponent<SpawnerMove>();
+
+
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
             {
                 Vector3 player2Pos = new Vector3(0, 3f, 8);
                 Quaternion rotate = new Quaternion(90, 0, 0, 0);
-                player2 =  PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);                
+                player2 = PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);
                 player2Controller = player2.GetComponent<Player2Controller>();
 
 
@@ -173,7 +201,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
 
         }
-        else{  // Offline
+        else
+        {  // Offline
             Vector3 playerPos = new Vector3(0, 8.5f, 0);
             player1 = PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
             playerController = player1.GetComponent<PlayerController>();
@@ -196,8 +225,9 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
 
-   // Sceane
-    public IEnumerator LoadResultSeekerWin ()
+
+    // Sceane
+    public IEnumerator LoadResultSeekerWin()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneSeeker);
@@ -223,7 +253,40 @@ public class GameController : MonoBehaviourPunCallbacks
         DisConnect();
     }
 
-    // Pos moving
+  
+    // planet scale changed
+    public void PlanetScaleUp()
+    {
+        planet.transform.localScale = planetScaleUp;
+        P1MoveUpDownPos(planetDefaultScale.x, planetScaleUp.x);
+        P2MoveUpDownPos(planetDefaultScale.x, planetScaleUp.x);
+        SpawnerMoveUpDownPos(planetDefaultScale.x, planetScaleUp.x);
+        StartCoroutine(SetDefaltPlanetScale());
+
+    }
+
+    public void PlanetScaleDown()
+    {
+        planet.transform.localScale = planetScaleDown;
+        P1MoveUpDownPos(planetDefaultScale.x, planetScaleDown.x);
+        P2MoveUpDownPos(planetDefaultScale.x, planetScaleDown.x);
+        SpawnerMoveUpDownPos(planetDefaultScale.x, planetScaleDown.x);
+        StartCoroutine(SetDefaltPlanetScale());
+    }
+
+
+    public IEnumerator SetDefaltPlanetScale()
+    {
+        yield return new WaitForSeconds(5.0f);
+        float beforeScale = planet.transform.localScale.x;
+        planet.transform.localScale = planetDefaultScale;
+        P1MoveUpDownPos(beforeScale, planetDefaultScale.x);
+        P2MoveUpDownPos(beforeScale, planetDefaultScale.x);
+        SpawnerMoveUpDownPos(beforeScale, planetDefaultScale.x);
+    }
+
+  
+
     public void P1MoveUpDownPos(float beforeScale, float afterScale)
     {
         playerController.MoveUpDownPos(beforeScale, afterScale);
@@ -232,7 +295,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public void P2MoveUpDownPos(float beforeScale, float afterScale)
     {
         player2Controller.MoveUpDownPos(beforeScale, afterScale);
-        
+
     }
 
     public void SpawnerMoveUpDownPos(float beforeScale, float afterScale)
@@ -253,12 +316,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void FloatingParticle(string player)
     {
-        if(player == "P1")
+        if (player == "P1")
         {
             cameraParticle.gameObject.SetActive(true);
-             cameraParticle.rect = new Rect(0, 0, 0.5f, 1);
+            cameraParticle.rect = new Rect(0, 0, 0.5f, 1);
         }
-        else if(player == "P2")
+        else if (player == "P2")
         {
             cameraParticle.gameObject.SetActive(true);
             cameraParticle.rect = new Rect(0.5f, 0, 0.5f, 1);
@@ -282,6 +345,8 @@ public class GameController : MonoBehaviourPunCallbacks
 
     }
 
+    
+
 
     // Photon
     public void SetReadyStateToTrue()  //Refer to UI button
@@ -304,7 +369,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.InRoom) { return false; }
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount != 2){ return false; }
+        if (PhotonNetwork.CurrentRoom.PlayerCount != 2) { return false; }
 
         players = PhotonNetwork.PlayerList;
         bool[] state = new bool[2];

@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Quaternion camRotate = Quaternion.Euler(90, 0, 0);
             GameObject onlineCamera = Instantiate(onlineCameraPrefab, camPos, camRotate);
             onlineCamera.transform.parent = this.gameObject.transform;
+            PhotonNetwork.NickName = "Player1";
         }    
     
     }
@@ -132,24 +133,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         return new Vector3(x, y, z);
     }
 
-    public void PlanetScaleUp()
-    {
-        planet.transform.localScale = new Vector3(20, 20, 20);
-        // SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
-        MoveUpDownPos(15.0f, 20.0f);
-        gameController.P2MoveUpDownPos(15.0f, 20.0f);
-        gameController.SpawnerMoveUpDownPos(15.0f, 20.0f);
-        StartCoroutine(SetDefaltPlanetScale());
-    }
-
-    public IEnumerator SetDefaltPlanetScale()
-    {
-        yield return new WaitForSeconds(5.0f);
-        planet.transform.localScale = new Vector3(15, 15, 15);
-        MoveUpDownPos(20.0f, 15.0f);
-        gameController.P2MoveUpDownPos(20.0f, 15.0f);
-        gameController.SpawnerMoveUpDownPos(20.0f, 15.0f);
-    }
 
     public void MoveUpDownPos(float beforeScale, float afterScale)
     {

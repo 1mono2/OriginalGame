@@ -28,6 +28,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
             Quaternion camRotate = Quaternion.Euler(-90, 180, 0);
             GameObject onlineCamera = Instantiate(onlineCameraPrefab, camPos, camRotate);
             onlineCamera.transform.parent = this.gameObject.transform;
+            PhotonNetwork.NickName = "Player2";
         }
 
     }
@@ -139,26 +140,6 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         float y = radius * Mathf.Sin(angle1 * Mathf.Deg2Rad) * Mathf.Sin(angle2 * Mathf.Deg2Rad);
         float z = radius * Mathf.Cos(angle1 * Mathf.Deg2Rad);
         return new Vector3(x, y, z);
-    }
-
-
-    public void PlanetScaleDown()
-    {
-        planet.transform.localScale = new Vector3(10, 10, 10);
-        SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
-        MoveUpDownPos(15.0f, 10.0f);
-        gameController.P1MoveUpDownPos(15.0f, 10.0f);
-        gameController.SpawnerMoveUpDownPos(15.0f, 20.0f);
-        StartCoroutine(SetDefaltPlanetScale());
-    }
-
-    public IEnumerator SetDefaltPlanetScale()
-    {
-        yield return new WaitForSeconds(5.0f);
-        planet.transform.localScale = new Vector3(15, 15, 15);
-        MoveUpDownPos(10.0f, 15.0f);
-        gameController.P1MoveUpDownPos(10.0f, 15.0f);
-        gameController.SpawnerMoveUpDownPos(10.0f, 15.0f);
     }
 
     public void MoveUpDownPos(float beforeScale, float afterScale)
