@@ -241,6 +241,16 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     // speedUpItem
+    public void P1SpeedUp()
+    {
+        playerController.SpeedUp();
+    }
+
+    public void P2SpeedUp()
+    {
+        player2Controller.SpeedUp();
+    }
+
     public void FloatingParticle(string player)
     {
         if(player == "P1")
