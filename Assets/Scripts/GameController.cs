@@ -47,7 +47,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     [SceneName]
     public string resultSceneEscapee;
 
-    public float time = 60.0f;
+    [HideInInspector]
+    public float time;
     public float defaulTime = 60.0f;
 
     public bool isBattling;
@@ -78,6 +79,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         UniCat.gameObject.SetActive(false);
 
         isBattling = false;
+        time = defaulTime;
 
 
 
@@ -88,7 +90,6 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     {
         if (integratedManager.isOnline)
         {
-            // ÉvÉåÉCÉÑÅ[Ç™óéÇøÇΩÇ∆Ç´Ç«Ç§Ç∑ÇÈÇ©
             if (readyAllplayers == false || playerController == null || player2Controller == null || spawnerMove == null || networkGameController == null)
             {
                 readyAllplayers = CheckReadyStateAllPlayers();
@@ -193,15 +194,17 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
     public override void OnJoinedRoom()
     {
+        Vector3 playerPos = new Vector3(0, 8.5f, 0);
+        Vector3 player2Pos = new Vector3(0, 3f, 8);
+        Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
+        Quaternion rotate = Quaternion.Euler(0, 0, 0);
         if (integratedManager.isOnline == true)
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
-                Vector3 playerPos = new Vector3(0, 8.5f, 0);
                 player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
                 playerController = player1.GetComponent<PlayerController>();
 
-                Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
                 spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
                 spawnerMove = spawner.GetComponent<SpawnerMove>();
 
@@ -210,8 +213,6 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
             {
-                Vector3 player2Pos = new Vector3(0, 3f, 8);
-                Quaternion rotate = new Quaternion(90, 0, 0, 0);
                 player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
                 player2Controller = player2.GetComponent<Player2Controller>();
 
@@ -226,16 +227,15 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
         else
         {  // Offline
-            Vector3 playerPos = new Vector3(0, 8.5f, 0);
+           
             player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
             playerController = player1.GetComponent<PlayerController>();
 
-            Vector3 player2Pos = new Vector3(0, 3f, 8);
-            Quaternion rotate = Quaternion.Euler(-90, 180, 0);
+            
             player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
             player2Controller = player2.GetComponent<Player2Controller>();
 
-            Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
+            
             spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
             spawnerMove = spawner.GetComponent<SpawnerMove>();
 
