@@ -11,7 +11,7 @@ using System.Linq;
 /// 
 /// </summary>
 
-public class GameController : MonoBehaviourPunCallbacks
+public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
 {
     // resources in photon folder
     [SerializeField]
@@ -231,7 +231,7 @@ public class GameController : MonoBehaviourPunCallbacks
             playerController = player1.GetComponent<PlayerController>();
 
             Vector3 player2Pos = new Vector3(0, 3f, 8);
-            Quaternion rotate = new Quaternion(90, 0, 0, 0);
+            Quaternion rotate = Quaternion.Euler(-90, 180, 0);
             player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
             player2Controller = player2.GetComponent<Player2Controller>();
 
@@ -424,6 +424,26 @@ public class GameController : MonoBehaviourPunCallbacks
         else
         {
             return false;
+        }
+
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        // 勝敗が決した後に接続が切れたら？ NetworkGameControllerがないのでFlag確認できない
+        // NickNameで判定するのは不安が残る。Seekerかescapeeで的確に分ける方法ないか？
+        player1 = GameObject.FindWithTag("escapee");
+        player2 = GameObject.FindWithTag("seeker");
+        Debug.Log("Call OnPlayerLeftRoom");
+        if (otherPlayer.NickName == "Player1")
+        {
+            Debug.Log("Player1 left this game");
+            photonView.RPC(nameof(SetUniCat), RpcTarget.AllViaServer);
+        }
+        else if (otherPlayer.NickName == "Player2")
+        {
+            Debug.Log("Player1 left this game");
+            photonView.RPC(nameof(SetHiroCat), RpcTarget.AllViaServer);
         }
 
     }

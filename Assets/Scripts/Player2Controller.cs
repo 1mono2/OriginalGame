@@ -13,6 +13,8 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     // Objects
     GameObject planet;
     GameController gameController;
+    IntegratedManager integratedManager;
+
     [SerializeField]
     private GameObject astronaut;
     Animator animator;
@@ -20,12 +22,19 @@ public class Player2Controller : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        if (photonView.IsMine)
+        integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        Vector3 camPos = new Vector3(0, 6.75f, -0.05f) + this.gameObject.transform.position;
+        Quaternion camRotate = Quaternion.Euler(0, 0, 0) * this.gameObject.transform.localRotation;
+        if (photonView.IsMine && integratedManager.isOnline)
         {
             GameObject onlineCameraPrefab = (GameObject)Resources.Load("OnlineCamera");
-            Vector3 camPos = new Vector3(0, -6.75f, 0.05f) + this.gameObject.transform.position;
-            Quaternion camRotate = Quaternion.Euler(-90, 180, 0);
             GameObject onlineCamera = Instantiate(onlineCameraPrefab, camPos, camRotate);
+            onlineCamera.transform.parent = this.gameObject.transform;
+            PhotonNetwork.NickName = "Player2";
+        }else if(integratedManager.isOnline == false)
+        {
+            GameObject CameraPlayer2Prefab = (GameObject)Resources.Load("CameraPlayer2");
+            GameObject onlineCamera = Instantiate(CameraPlayer2Prefab, camPos, camRotate);
             onlineCamera.transform.parent = this.gameObject.transform;
             PhotonNetwork.NickName = "Player2";
         }
