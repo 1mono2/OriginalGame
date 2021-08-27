@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class StratPlanet : MonoBehaviour
 {
+
+    [SerializeField]
+    private float planetRotateSpeed = 0.6f; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +17,6 @@ public class StratPlanet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0.2f, 0, 0);
+        transform.Rotate(planetRotateSpeed, 0, 0);
     }
 }

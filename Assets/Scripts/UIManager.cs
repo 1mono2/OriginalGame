@@ -9,7 +9,8 @@ public class UIManager : MonoBehaviour
     IntegratedManager integratedManager;
     public Text timeText;
     public Text countDownText;
-    public Canvas explain;
+    [SerializeField]
+    private Canvas beforeStartCanvas;
 
     bool onetime;
     // Start is called before the first frame update
@@ -18,7 +19,11 @@ public class UIManager : MonoBehaviour
         gameController = GetComponent<GameController>();
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         onetime = true;
-        
+
+        if (!integratedManager.isOnline)
+        {
+            beforeStartCanvas.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -29,9 +34,9 @@ public class UIManager : MonoBehaviour
         {
             if (gameController.isBattling == false & onetime == true & gameController.readyAllplayers == true)
             {
-                explain.gameObject.SetActive(false);
                 StartCoroutine(CountDown());
                 onetime = false;
+                beforeStartCanvas.gameObject.SetActive(false);
             }
 
             }
@@ -39,8 +44,7 @@ public class UIManager : MonoBehaviour
         {
             if (gameController.isBattling == false & onetime == true)
             {
-                if (Input.anyKey) {
-                    explain.gameObject.SetActive(false);
+                if (Input.anyKeyDown) {
                     StartCoroutine(CountDown());
                     onetime = false;
                 }
