@@ -17,7 +17,6 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     private GameObject astronaut;
     Animator animator;
 
-    GameObject UniCat;
 
     private void Awake()
     {
@@ -41,8 +40,6 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
         animator = astronaut.GetComponent<Animator>();
-        // ‰F’ˆ”L
-        UniCat = GameObject.Find("UniverseCat");
 
     }
 
@@ -106,7 +103,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     {
         if(collision.gameObject.tag == "escapee")
         {
-            gameController.SetUniCat();
+            GameObject.Find("GameController").GetComponent<PhotonView>().RPC(nameof(gameController.SetUniCat), RpcTarget.AllViaServer);
         }
     }
 

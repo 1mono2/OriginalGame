@@ -34,7 +34,8 @@ public class SpawnerGenerateItem : MonoBehaviourPunCallbacks
                 {
                     yield return new WaitForSeconds(itemInterval);
                     // Instantiate(items[Random.Range(0, items.Length)], this.transform.position, Quaternion.identity);
-                    PhotonNetwork.Instantiate(items[Random.Range(0, items.Length)].gameObject.name, this.transform.position, Quaternion.identity);
+                    item = PhotonNetwork.Instantiate(items[Random.Range(0, items.Length)].gameObject.name, this.transform.position, Quaternion.identity);
+                    Debug.Log(string.Format("{0} is generated", item.gameObject.name));
                 }
             }
 

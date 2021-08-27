@@ -14,14 +14,17 @@ using System.Linq;
 public class GameController : MonoBehaviourPunCallbacks
 {
     // resources in photon folder
-    public GameObject player1Prefab;
-    public GameObject player2Prefab;
+    [SerializeField]
+    public GameObject Player1Prefab;
+    [SerializeField]
+    public GameObject Player2Prefab;
     GameObject player1;
     GameObject player2;
     PlayerController playerController;
     Player2Controller player2Controller;
 
-    public GameObject spawnerPrefab;
+    [SerializeField]
+    public GameObject SpawnerPrefab;
     GameObject spawner;
     SpawnerMove spawnerMove;
 
@@ -29,6 +32,11 @@ public class GameController : MonoBehaviourPunCallbacks
     Vector3 planetDefaultScale = new Vector3(15, 15, 15);
     Vector3 planetScaleUp = new Vector3(20, 20, 20);
     Vector3 planetScaleDown = new Vector3(10, 10, 10);
+
+    [SerializeField]
+    public GameObject NetworkGameControllerPrefab;
+    GameObject NetworkGameControllerObj;
+    NetworkGameController networkGameController;
 
     public Camera cameraParticle;
     IntegratedManager integratedManager;
@@ -81,7 +89,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (integratedManager.isOnline)
         {
             // ÉvÉåÉCÉÑÅ[Ç™óéÇøÇΩÇ∆Ç´Ç«Ç§Ç∑ÇÈÇ©
-            if (readyAllplayers == false || playerController == null || player2Controller == null || spawnerMove == null)
+            if (readyAllplayers == false || playerController == null || player2Controller == null || spawnerMove == null || networkGameController == null)
             {
                 readyAllplayers = CheckReadyStateAllPlayers();
                 player1 = GameObject.FindWithTag("escapee");
@@ -104,6 +112,13 @@ public class GameController : MonoBehaviourPunCallbacks
                     spawnerMove = spawner.GetComponent<SpawnerMove>();
                     //Debug.Log(string.Format("{0}, is respawn", spawnerMove));
                 }
+
+                NetworkGameControllerObj = GameObject.FindWithTag("NetworkGameController");
+                if (NetworkGameControllerObj)
+                {
+                    networkGameController = NetworkGameControllerObj.GetComponent<NetworkGameController>();
+                }
+                
             }
 
 
@@ -113,14 +128,14 @@ public class GameController : MonoBehaviourPunCallbacks
 
                 float elapsedTime = Mathf.Max(0f, unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000f);
                 time = defaulTime - elapsedTime;
-                Debug.Log(elapsedTime);
-                Debug.Log(time);
                 if (time <= 0)
                 {
                     Debug.Log("Lose Seeker");
-                    SetHiroCat();
+                    if (networkGameController.finishFlag)
+                    {
+                        photonView.RPC(nameof(SetHiroCat), RpcTarget.AllViaServer);
+                    }
                 }
-                
             }
         }
         else //offline
@@ -129,8 +144,10 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 if (time <= 0)
                 {
-                    SetHiroCat();
-
+                    if (networkGameController.finishFlag)
+                    {
+                        photonView.RPC(nameof(SetHiroCat), RpcTarget.AllViaServer);
+                    }
                 }
                 else
                 {
@@ -181,23 +198,24 @@ public class GameController : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
                 Vector3 playerPos = new Vector3(0, 8.5f, 0);
-                player1 = PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+                player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
                 playerController = player1.GetComponent<PlayerController>();
 
                 Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-                spawner = PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+                spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
                 spawnerMove = spawner.GetComponent<SpawnerMove>();
 
-
+                NetworkGameControllerObj = PhotonNetwork.Instantiate(NetworkGameControllerPrefab.gameObject.name, Vector3.zero , Quaternion.identity);
+                networkGameController = NetworkGameControllerObj.GetComponent<NetworkGameController>();
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2) // astronaut
             {
                 Vector3 player2Pos = new Vector3(0, 3f, 8);
                 Quaternion rotate = new Quaternion(90, 0, 0, 0);
-                player2 = PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);
+                player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
                 player2Controller = player2.GetComponent<Player2Controller>();
 
-
+                
             }
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -209,17 +227,20 @@ public class GameController : MonoBehaviourPunCallbacks
         else
         {  // Offline
             Vector3 playerPos = new Vector3(0, 8.5f, 0);
-            player1 = PhotonNetwork.Instantiate(player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+            player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
             playerController = player1.GetComponent<PlayerController>();
 
             Vector3 player2Pos = new Vector3(0, 3f, 8);
             Quaternion rotate = new Quaternion(90, 0, 0, 0);
-            player2 = PhotonNetwork.Instantiate(player2Prefab.gameObject.name, player2Pos, rotate);
+            player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
             player2Controller = player2.GetComponent<Player2Controller>();
 
             Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-            spawner = PhotonNetwork.Instantiate(spawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+            spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
             spawnerMove = spawner.GetComponent<SpawnerMove>();
+
+            NetworkGameControllerObj = PhotonNetwork.Instantiate(NetworkGameControllerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+            networkGameController = NetworkGameControllerObj.GetComponent<NetworkGameController>();
         }
     }
 
@@ -251,19 +272,24 @@ public class GameController : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(resultSceneEscapee);
     }
-
-    public void SetHiroCat()
+    [PunRPC]
+    public void SetHiroCat(PhotonMessageInfo info)
     {
+
+        networkGameController.SetFinishFlag(false);
         hiroyukiCat.SetActive(true);
         StartCoroutine(LoadResulEscapeeWin());
-        DisConnect();
+        DisConnect();      
     }
-
-    public void SetUniCat()
+    [PunRPC]
+    public void SetUniCat(PhotonMessageInfo info)
     {
+     
+        networkGameController.SetFinishFlag(false);
         UniCat.gameObject.SetActive(true);
         StartCoroutine(LoadResultSeekerWin());
         DisConnect();
+        
     }
 
   

@@ -7520,6 +7520,7 @@ GameObject:
   - component: {fileID: 1324666658}
   - component: {fileID: 1324666657}
   - component: {fileID: 1324666659}
+  - component: {fileID: 1324666660}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -7539,13 +7540,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670decac1d128cb4785070d6152b0cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1Prefab: {fileID: 3115323763401491366, guid: 0dda9a19285bb4347900f831e714e2aa, type: 3}
-  player2Prefab: {fileID: 4808860843445391152, guid: e91ee74c927b68b4797adc85cdaf9f09, type: 3}
-  spawnerPrefab: {fileID: 3021420115017560251, guid: 3375320fad312f446a37afa2b13f40e1, type: 3}
+  Player1Prefab: {fileID: 3115323763401491366, guid: 0dda9a19285bb4347900f831e714e2aa, type: 3}
+  Player2Prefab: {fileID: 4808860843445391152, guid: e91ee74c927b68b4797adc85cdaf9f09, type: 3}
+  SpawnerPrefab: {fileID: 3021420115017560251, guid: 3375320fad312f446a37afa2b13f40e1, type: 3}
+  NetworkGameControllerPrefab: {fileID: 7954245949561554208, guid: de7337b2851a71649a6a517b868ca9ea, type: 3}
   cameraParticle: {fileID: 326716109}
   resultSceneSeeker: ResultSeeker
   resultSceneEscapee: ResultEscapee
-  time: 90
+  time: 60
+  defaulTime: 10
   isBattling: 0
   readyAllplayers: 0
 --- !u!4 &1324666658
@@ -7577,6 +7580,28 @@ MonoBehaviour:
   timeText: {fileID: 1403344970}
   countDownText: {fileID: 1955250660}
   explain: {fileID: 1988469737}
+--- !u!114 &1324666660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324666656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1403344968
 GameObject:
   m_ObjectHideFlags: 0
