@@ -772,6 +772,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: damaged_Battery_small_06 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e8c721df9dfa30a48bdb36f19c81b90f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e8c721df9dfa30a48bdb36f19c81b90f, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -840,6 +844,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
       propertyPath: m_Name
       value: damaged_Battery_medium_05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
       propertyPath: m_RootOrder
@@ -1723,6 +1731,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battery_medium_05
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 00535fc2ee77d314e8bb9ff3e1f754a3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 00535fc2ee77d314e8bb9ff3e1f754a3, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1893,6 +1905,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: e8c721df9dfa30a48bdb36f19c81b90f, type: 3}
       propertyPath: m_Name
       value: damaged_Battery_small_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e8c721df9dfa30a48bdb36f19c81b90f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e8c721df9dfa30a48bdb36f19c81b90f, type: 3}
       propertyPath: m_RootOrder
@@ -7548,7 +7564,7 @@ MonoBehaviour:
   resultSceneSeeker: ResultSeeker
   resultSceneEscapee: ResultEscapee
   time: 60
-  defaulTime: 10
+  defaulTime: 120
   isBattling: 0
   readyAllplayers: 0
 --- !u!4 &1324666658
@@ -8136,6 +8152,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
       propertyPath: m_Name
       value: damaged_Battery_medium_05 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bbf15e28c066b2a49b0c74d051dc72d8, type: 3}
       propertyPath: m_RootOrder
@@ -9329,6 +9349,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: fdf643b7e57fb9f498ade64169c21613, type: 3}
       propertyPath: m_Name
       value: Battery_small_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fdf643b7e57fb9f498ade64169c21613, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: fdf643b7e57fb9f498ade64169c21613, type: 3}
       propertyPath: m_RootOrder

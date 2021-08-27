@@ -23,6 +23,7 @@ public class SpawnerMove : MonoBehaviour
 
         planet = GameObject.Find("Planet");
 
+        StartCoroutine(Warp());
     }
 
     // Update is called once per frame
@@ -32,23 +33,26 @@ public class SpawnerMove : MonoBehaviour
         {
             timeleft -= Time.deltaTime;
             if (timeleft <= 0.0)
-            {
-                Warp();
-
+            { 
+                //Warp();
                 timeleft = defaltTimeLeft;
             }
+            
+            
         }
         
     }
 
 
-    public void Warp()
+    public IEnumerator Warp()
     {
+        while (true) {
+            yield return new WaitForSeconds(5.0f);
         SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
-        Vector3 randomPos = GetPosition(Random.Range(0, 360), Random.Range(0, 360),
-            planetCollider.radius * (planet.transform.localScale.x - 1));
+        Vector3 randomPos = GetPosition(Random.Range(0, 360), Random.Range(0, 360), planetCollider.radius * (planet.transform.localScale.x - 1));
         Debug.Log(randomPos);
         rigidbody.MovePosition(randomPos);
+        }
     }
     public Vector3 GetPosition(float angle1, float angle2, float radius)
     {
