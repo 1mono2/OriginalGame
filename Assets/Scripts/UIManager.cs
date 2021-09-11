@@ -7,20 +7,28 @@ public class UIManager : MonoBehaviour
 {
     GameController gameController;
     IntegratedManager integratedManager;
+    IntegratedManager.GameMode mode;
     public Text timeText;
     public Text countDownText;
     [SerializeField]
     private Canvas beforeStartCanvas;
 
     bool onetime;
+
+  /*  void Main()
+    {
+        Vector3 v = new Vector3(0.1f, 0.1f, 0.1f).normalized;
+        System.Console.Write(v);
+    }*/
     // Start is called before the first frame update
     void Start()
     {
         gameController = GetComponent<GameController>();
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        mode = integratedManager.GetMode();
         onetime = true;
 
-        if (!integratedManager.isOnline)
+        if (mode != IntegratedManager.GameMode.online)
         {
             beforeStartCanvas.gameObject.SetActive(false);
         }
@@ -30,7 +38,7 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
-        if (integratedManager.isOnline)
+        if (mode == IntegratedManager.GameMode.online)
         {
             if (gameController.isBattling == false & onetime == true & gameController.readyAllplayers == true)
             {
@@ -40,7 +48,7 @@ public class UIManager : MonoBehaviour
             }
 
             }
-        else
+        else if (mode == IntegratedManager.GameMode.offline || mode == IntegratedManager.GameMode.cpu)
         {
             if (gameController.isBattling == false & onetime == true)
             {

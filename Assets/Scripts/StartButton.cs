@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class StartButton : MonoBehaviour
 { 
     IntegratedManager integratedManager;
+    IntegratedManager.GameMode mode;
     [SerializeField]
     Image explain;
     [SerializeField]
@@ -24,6 +25,7 @@ public class StartButton : MonoBehaviour
     void Start()
     {
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        mode = integratedManager.GetMode();
     }
 
     private void Update()
@@ -39,16 +41,24 @@ public class StartButton : MonoBehaviour
 
     public void Player2Battle()
     {
-        integratedManager.isOnline = false;
+
+        integratedManager.SetMode(IntegratedManager.GameMode.offline);
         SceneManager.LoadScene(mainBattle);
     }
 
 
     public void OnlineBattle()
     {
-        integratedManager.isOnline = true;
+        integratedManager.SetMode(IntegratedManager.GameMode.online);
         SceneManager.LoadScene(mainBattle);
 
+    }
+
+    public void CPUBattle()
+    {
+
+        integratedManager.SetMode(IntegratedManager.GameMode.cpu);
+        SceneManager.LoadScene(mainBattle);
     }
 
     public void ViewExplainPanel()

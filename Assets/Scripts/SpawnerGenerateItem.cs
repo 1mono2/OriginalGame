@@ -11,6 +11,8 @@ public class SpawnerGenerateItem : MonoBehaviourPunCallbacks
     public GameObject[] items;
     public float itemInterval = 7f;
 
+    public bool generateFlag = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +25,7 @@ public class SpawnerGenerateItem : MonoBehaviourPunCallbacks
 
     IEnumerator ItemSearchExistenceAndGenerate()
     {
-        while (true)
+        while (generateFlag)
         {
             yield return new WaitForSeconds(1);  // search items per 1seconds
            if (gameController.isBattling == true && photonView.IsMine)

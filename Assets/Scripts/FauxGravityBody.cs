@@ -7,7 +7,7 @@ public class FauxGravityBody : MonoBehaviour
     GameObject planet;
     public FauxGravityAttractor attractor;
     private Transform myTransform;
-    Rigidbody rigidbody;
+    Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
@@ -15,9 +15,9 @@ public class FauxGravityBody : MonoBehaviour
         planet = GameObject.Find("Planet");
         attractor = planet.GetComponent<FauxGravityAttractor>();
 
-        rigidbody = GetComponent<Rigidbody>();
-        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        rigidbody.useGravity = false;
+        rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.useGravity = false;
         myTransform = transform;
     }
 

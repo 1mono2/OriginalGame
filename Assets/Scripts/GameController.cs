@@ -22,6 +22,10 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     GameObject player2;
     PlayerController playerController;
     Player2Controller player2Controller;
+    [SerializeField]
+    GameObject chaserPrefab;
+    GameObject chaser;
+    ChaserController chaserController;
 
     [SerializeField]
     public GameObject SpawnerPrefab;
@@ -40,7 +44,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
     public Camera cameraParticle;
     IntegratedManager integratedManager;
-
+    private IntegratedManager.GameMode mode;
 
     [SceneName]
     public string resultSceneSeeker;
@@ -60,6 +64,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public bool readyAllplayers = false;
     Photon.Realtime.Player[] players;
 
+ 
+
 
 
 
@@ -67,6 +73,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     void Start()
     {
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
+        mode = integratedManager.GetMode();
         Connect();
 
         planet = GameObject.Find("Planet");
@@ -88,7 +95,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (integratedManager.isOnline)
+        
+        if (mode == IntegratedManager.GameMode.online)
         {
             if (readyAllplayers == false || playerController == null || player2Controller == null || spawnerMove == null || networkGameController == null)
             {
@@ -139,7 +147,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 }
             }
         }
-        else //offline
+        else if(mode == IntegratedManager.GameMode.offline || mode == IntegratedManager.GameMode.cpu)
         {
             if (isBattling == true)
             {
@@ -162,25 +170,30 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public void Connect()
     {
 
-        if (integratedManager.isOnline)
+        if (mode == IntegratedManager.GameMode.online)
         {
             PhotonNetwork.ConnectUsingSettings();
-            Debug.Log("Online Now!");
+            Debug.Log("Online battle Now!");
         }
-        else  //offline
+        else if (mode == IntegratedManager.GameMode.offline)
         {
             PhotonNetwork.OfflineMode = true;
-            Debug.Log("Offline Now!");
+            Debug.Log("Offline battle Now!");
+        }
+        else if (mode == IntegratedManager.GameMode.cpu)
+        {
+            PhotonNetwork.OfflineMode = true;
+            Debug.Log("CPU battle Now!");
         }
     }
 
     public void DisConnect()
     {
-        if (integratedManager.isOnline)
+        if (mode == IntegratedManager.GameMode.online)
         {
             PhotonNetwork.Disconnect();
         }
-        else
+        else  //offline cpu
         {
             PhotonNetwork.OfflineMode = false;
         }
@@ -197,8 +210,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         Vector3 playerPos = new Vector3(0, 8.5f, 0);
         Vector3 player2Pos = new Vector3(0, 3f, 8);
         Vector3 spawnerPos = new Vector3(1.5f, 8.1f, 0f);
-        Quaternion rotate = Quaternion.Euler(0, 0, 0);
-        if (integratedManager.isOnline == true)
+        Quaternion rotate = Quaternion.Euler(0, 180, 0);
+        if (mode == IntegratedManager.GameMode.online)
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1) // cat
             {
@@ -225,8 +238,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
             }
 
         }
-        else
-        {  // Offline
+        else if (mode == IntegratedManager.GameMode.offline)
+        {  
            
             player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
             playerController = player1.GetComponent<PlayerController>();
@@ -236,6 +249,22 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
             player2Controller = player2.GetComponent<Player2Controller>();
 
             
+            spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+            spawnerMove = spawner.GetComponent<SpawnerMove>();
+
+            NetworkGameControllerObj = PhotonNetwork.Instantiate(NetworkGameControllerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
+            networkGameController = NetworkGameControllerObj.GetComponent<NetworkGameController>();
+        }
+        else if (mode == IntegratedManager.GameMode.cpu)
+        {
+            player1 = PhotonNetwork.Instantiate(Player1Prefab.gameObject.name, playerPos, Quaternion.identity);
+            playerController = player1.GetComponent<PlayerController>();
+
+
+            chaser = PhotonNetwork.Instantiate(chaserPrefab.gameObject.name, player2Pos, rotate);
+            chaserController = chaser.GetComponent<ChaserController>();
+
+
             spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
             spawnerMove = spawner.GetComponent<SpawnerMove>();
 

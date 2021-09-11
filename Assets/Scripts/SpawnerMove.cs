@@ -7,7 +7,7 @@ public class SpawnerMove : MonoBehaviour
    
     private GameObject gameControllerObj;
     private GameController gameController;
-    Rigidbody rigidbody;
+    Rigidbody rb;
     private GameObject planet;
 
     public float timeleft = 0.0f;
@@ -17,7 +17,7 @@ public class SpawnerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         gameControllerObj = GameObject.Find("GameController");
         gameController = gameControllerObj.GetComponent<GameController>();
 
@@ -49,9 +49,9 @@ public class SpawnerMove : MonoBehaviour
         while (true) {
             yield return new WaitForSeconds(5.0f);
         SphereCollider planetCollider = planet.GetComponent<SphereCollider>();
-        Vector3 randomPos = GetPosition(Random.Range(0, 360), Random.Range(0, 360), planetCollider.radius * (planet.transform.localScale.x - 1));
-        Debug.Log(randomPos);
-        rigidbody.MovePosition(randomPos);
+        Vector3 randomPos = GetPosition(Random.Range(0, 360), Random.Range(0, 360), planetCollider.radius * (planet.transform.localScale.x));
+        //Debug.Log("Spawner move to" + randomPos);
+        rb.MovePosition(randomPos);
         }
     }
     public Vector3 GetPosition(float angle1, float angle2, float radius)
@@ -65,6 +65,6 @@ public class SpawnerMove : MonoBehaviour
     public void MoveUpDownPos(float beforeScale, float afterScale)
     {
         Vector3 scaleUpPos = transform.position * (afterScale / beforeScale);
-        rigidbody.MovePosition(scaleUpPos);
+        rb.MovePosition(scaleUpPos);
     }
 }
