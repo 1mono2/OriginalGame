@@ -59,8 +59,6 @@ public class WarpItem : MonoBehaviourPunCallbacks
 
                 }
             }
-           
-
         }
 
         if (tag == "seeker")
@@ -75,6 +73,7 @@ public class WarpItem : MonoBehaviourPunCallbacks
                     if (photonView.IsMine)
                     {
                         Debug.Log("2p has ownership and destroys item");
+                        
                         photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
                         //PhotonNetwork.Destroy(this.gameObject);
                     }
@@ -89,15 +88,13 @@ public class WarpItem : MonoBehaviourPunCallbacks
                         //Debug.Log(string.Format("owner is {0}, controller is {0}", owner, controller));
                         //PhotonNetwork.Destroy(this.gameObject);
                         Debug.Log("2p doesnt have ownership.");
+                        
                         photonView.RPC(nameof(DestroyItemOnLocal), RpcTarget.AllViaServer);
+                        
                     }
                 }
-            }
-            
+            }   
         }
-
-        
-       
     }
 
     [PunRPC]

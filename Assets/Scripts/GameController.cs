@@ -164,6 +164,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 }
             }
         }
+        
     }
 
     // Photon
@@ -246,7 +247,7 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
             
             player2 = PhotonNetwork.Instantiate(Player2Prefab.gameObject.name, player2Pos, rotate);
-            player2Controller = player2.GetComponent<Player2Controller>();
+            player2Controller =  player2.GetComponent<Player2Controller>();
 
             
             spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
@@ -261,8 +262,8 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
             playerController = player1.GetComponent<PlayerController>();
 
 
-            chaser = PhotonNetwork.Instantiate(chaserPrefab.gameObject.name, player2Pos, rotate);
-            chaserController = chaser.GetComponent<ChaserController>();
+            player2 = PhotonNetwork.Instantiate(chaserPrefab.gameObject.name, player2Pos, rotate);
+            player2Controller = player2.GetComponent<ChaserController>();
 
 
             spawner = PhotonNetwork.Instantiate(SpawnerPrefab.gameObject.name, spawnerPos, Quaternion.identity);
@@ -410,7 +411,6 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public void P2Warp()
     {
         player2Controller.Warp();
-
     }
 
     
@@ -476,4 +476,6 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
 
     }
+
+    
 }

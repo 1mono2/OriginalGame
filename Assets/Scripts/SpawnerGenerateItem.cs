@@ -11,7 +11,7 @@ public class SpawnerGenerateItem : MonoBehaviourPunCallbacks
     public GameObject[] items;
     public float itemInterval = 7f;
 
-    public bool generateFlag = false;
+    bool generateFlag = true;
 
     // Start is called before the first frame update
     void Start()

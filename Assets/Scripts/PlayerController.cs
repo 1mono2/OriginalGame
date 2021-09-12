@@ -70,8 +70,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (gameController.isBattling == true && photonView.IsMine )
         {
-            //transform.rotation = Quaternion.LookRotation(CalArcticDirection(this.transform.position), this.transform.position);
-
             float h = Input.GetAxisRaw("Player1Horizontal");
             float v = Input.GetAxisRaw("Player1Vertical");
             moveDir = new Vector3(h, 0, v).normalized;
@@ -86,18 +84,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
-    Vector3 CalArcticDirection(Vector3 pos)
-    {
-        Vector3 arcticPos = new Vector3(0.1f, 749f, 0.1f);
-        float a1 = Mathf.Pow(arcticPos.x, 2) + Mathf.Pow(arcticPos.y, 2) + Mathf.Pow(arcticPos.z, 2);
-        float b1 = Mathf.Pow(pos.x, 2) + Mathf.Pow(pos.y, 2) + Mathf.Pow(pos.z, 2);
-        float c1 = arcticPos.x * pos.x + arcticPos.y * pos.y + arcticPos.z * pos.z;
-        float s = (a1 - c1) / (a1 - (Mathf.Pow(c1, 2) / b1));
-        float t_1 = -(a1 * c1 - Mathf.Pow(c1, 2)) / (a1 * b1 - Mathf.Pow(c1, 2));
-
-        Vector3 vectorBP = s * arcticPos + t_1 * pos;
-        return vectorBP;
-    }
 
     private void FixedUpdate()
     {

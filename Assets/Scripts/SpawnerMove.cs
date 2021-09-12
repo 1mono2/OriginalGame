@@ -37,10 +37,7 @@ public class SpawnerMove : MonoBehaviour
                 //Warp();
                 timeleft = defaltTimeLeft;
             }
-            
-            
         }
-        
     }
 
 

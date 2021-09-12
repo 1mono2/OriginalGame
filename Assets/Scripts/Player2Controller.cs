@@ -22,7 +22,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     protected Animator animator;
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         mode = integratedManager.GetMode();
@@ -75,7 +75,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         }
     }
 
-    protected void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (gameController.isBattling == true)
         {
@@ -83,7 +83,7 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         }
     }
 
-    protected void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "escapee")
         {

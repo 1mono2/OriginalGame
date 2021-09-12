@@ -15,7 +15,7 @@ public class SearchCharacter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "escapee")
+        if (other.CompareTag("escapee"))
         {
             Debug.Log("Player enter chase aria");
         }
@@ -23,11 +23,11 @@ public class SearchCharacter : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Item")
+        if (other.CompareTag("Item"))
         {
             chaserController.SetPurposeState(ChaserController.PurposeState.toGetItem, other.transform);
         }
-        else if(other.tag == "escapee")
+        else if(other.CompareTag("escapee"))
         { 
             chaserController.SetPurposeState(ChaserController.PurposeState.chase, other.transform);
         }
@@ -38,7 +38,7 @@ public class SearchCharacter : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "escapee")
+        if (other.CompareTag("escapee"))
         {
             Debug.Log("Chaser lost player");
             chaserController.SetPurposeState(ChaserController.PurposeState.search);

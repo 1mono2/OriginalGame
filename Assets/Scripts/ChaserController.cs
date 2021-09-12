@@ -5,9 +5,7 @@ using Photon.Pun;
 
 public class ChaserController : Player2Controller
 {
-    //[SerializeField]
-    //new float moveSpeed = 5;
-
+ 
     SphereCollider planetCollider;
     public enum PurposeState
     {
@@ -22,12 +20,10 @@ public class ChaserController : Player2Controller
     Vector3 arcticPos = new Vector3(0.1f, 7.49f, 0.1f);
 
     GameObject sphere;
-    void Awake()
+    protected override void Awake()
     {
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         mode = integratedManager.GetMode();
-        // Vector3 camPos = new Vector3(0, 7.9f, -0.05f) + this.gameObject.transform.position;
-        // Quaternion camRotate = Quaternion.Euler(90, 180, 0);
         
     }
 
@@ -40,12 +36,10 @@ public class ChaserController : Player2Controller
         planetMag = planetCollider.radius * (planet.transform.localScale.x);
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         animator = astronaut.GetComponent<Animator>();
-        // to arctic 
-        destination = new Vector3(0, 6.3f , -4.0f);
-        //destination = new Vector3(7.49f, 0.1f, 0.1f);
+
+        destination = RandomDestination();
         Vector3 chaserOnPlanetPos = transform.position * (planetMag / transform.position.magnitude);
         moveDir = CalAzimuth(chaserOnPlanetPos, destination);
-       // moveDir = new Vector3(-0.5f, 0, 0.5f);
     }
 
 
@@ -81,14 +75,13 @@ public class ChaserController : Player2Controller
                     Vector3 chaserOnPlanetPos = transform.position * (planetMag / transform.position.magnitude);
                     moveDir = CalAzimuth(chaserOnPlanetPos, destination);
                 }
-                
-
 
             }
             else if (purposeState == PurposeState.toGetItem)
             {
-                Vector3 chaserOnPlanetPos = this.transform.position * (planetMag / this.transform.position.magnitude);
-                moveDir = CalAzimuth(chaserOnPlanetPos, destination);
+                Vector3 itdmOnPlanetPos = destination * (planetMag / destination.magnitude);
+                Vector3 chaserOnPlanetPos = transform.position * (planetMag / transform.position.magnitude);
+                moveDir = CalAzimuth(chaserOnPlanetPos, itdmOnPlanetPos);
             }
 
             float deg_dir = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
@@ -113,10 +106,30 @@ public class ChaserController : Player2Controller
         else if (tempState == PurposeState.search)
         {
             destination = RandomDestination();
-        }else if(tempState == PurposeState.toGetItem)
+        }
+        else if(tempState == PurposeState.toGetItem)
         {
             destination = targetObj.position;
         }
+    }
+
+    internal IEnumerator SetPurposeState(PurposeState tempState)
+    {
+        yield return new WaitForSeconds(1.0f);
+        purposeState = tempState;
+       /* if (tempState == PurposeState.chase)
+        {
+            playerPos = targetObj.position;
+        }
+        else*/ 
+        if (tempState == PurposeState.search)
+        {
+            destination = RandomDestination();
+        }
+        /*else if (tempState == PurposeState.toGetItem)
+        {
+            destination = targetObj.position;
+        }*/
     }
 
     internal PurposeState GetPurposeState()
@@ -170,7 +183,6 @@ public class ChaserController : Player2Controller
 
     Vector3 CalArcticDirection(Vector3 pos)
     {
-        
         float a1 = Mathf.Pow(arcticPos.x, 2) + Mathf.Pow(arcticPos.y, 2) + Mathf.Pow(arcticPos.z, 2);
         float b1 = Mathf.Pow(pos.x, 2) + Mathf.Pow(pos.y, 2) + Mathf.Pow(pos.z, 2);
         float c1 = arcticPos.x * pos.x + arcticPos.y * pos.y + arcticPos.z * pos.z;
@@ -179,6 +191,16 @@ public class ChaserController : Player2Controller
 
         Vector3 vectorBP = s * arcticPos + t_1 * pos;
         return vectorBP;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            // コルーチンで〇秒後にするのは不安定で使いたくない
+            // しかし、DestroyしてもGetItemが代入されてしまうため
+            StartCoroutine(SetPurposeState(PurposeState.search));
+        }
     }
 
 }
