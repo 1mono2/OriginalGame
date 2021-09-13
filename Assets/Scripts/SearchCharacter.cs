@@ -17,7 +17,7 @@ public class SearchCharacter : MonoBehaviour
     {
         if (other.CompareTag("escapee"))
         {
-            Debug.Log("Player enter chase aria");
+            Debug.Log("Player enters chase aria");
         }
     }
 

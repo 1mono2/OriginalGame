@@ -18,7 +18,7 @@ public class ChaserController : Player2Controller
     private Vector3 destination;
     float planetMag;
     Vector3 arcticPos = new Vector3(0.1f, 7.49f, 0.1f);
-
+    Vector3 latestChaserPos;
     GameObject sphere;
     protected override void Awake()
     {
@@ -53,7 +53,7 @@ public class ChaserController : Player2Controller
             if (purposeState == PurposeState.chase)
             {
 
-                Vector3 playerOnPlanetPos = playerPos * (planetMag / playerPos.magnitude);
+                Vector3 playerOnPlanetPos = destination * (planetMag / destination.magnitude);
                 Vector3 chaserOnPlanetPos = transform.position * (planetMag / this.transform.position.magnitude);
                 moveDir = CalAzimuth(chaserOnPlanetPos, playerOnPlanetPos);
 
@@ -101,7 +101,7 @@ public class ChaserController : Player2Controller
         purposeState = tempState;
         if(tempState == PurposeState.chase)
         {
-            playerPos = targetObj.position;
+            destination = targetObj.position;
         }
         else if (tempState == PurposeState.search)
         {
