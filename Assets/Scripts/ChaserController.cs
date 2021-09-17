@@ -44,8 +44,6 @@ public class ChaserController : Player2Controller
     {
         if (gameController.isBattling == true)
         {
-
-            
             if (purposeState == PurposeState.chase)
             {
 
@@ -78,14 +76,6 @@ public class ChaserController : Player2Controller
                 Vector3 itdmOnPlanetPos = destination * (planetMag / destination.magnitude);
                 Vector3 chaserOnPlanetPos = transform.position * (planetMag / transform.position.magnitude);
                 moveDir = CalAzimuth(chaserOnPlanetPos, itdmOnPlanetPos);
-            }
-
-            float deg_dir = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
-            animator.SetInteger("AnimationPar", 0);
-            if (moveDir.z != 0 | moveDir.x != 0)
-            {
-                animator.SetInteger("AnimationPar", 1);
-                astronaut.gameObject.transform.localEulerAngles = new Vector3(0, deg_dir, 0);
             }
 
         }

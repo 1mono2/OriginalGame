@@ -76,17 +76,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (gameController.isBattling == true && photonView.IsMine )
         {
-            float h = Input.GetAxisRaw("Player1Horizontal");
-            float v = Input.GetAxisRaw("Player1Vertical");
-            moveDir = new Vector3(h, 0, v).normalized;
-            float deg_dir = Mathf.Atan2(h, v) * Mathf.Rad2Deg;
-
-            animator.SetInteger("Walking", 0);
-            if (h != 0 | v != 0)
+            if (mode == IntegratedManager.GameMode.online || mode == IntegratedManager.GameMode.cpu)
             {
-                animator.SetInteger("Walking", 1); //true
-                cat.gameObject.transform.localEulerAngles = new Vector3(0, deg_dir, 0);
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
+                moveDir = new Vector3(h, 0, v).normalized;
             }
+            else // mode == IntegratedManager.GameMode.offline
+            {
+                float h = Input.GetAxisRaw("Player1Horizontal");
+                float v = Input.GetAxisRaw("Player1Vertical");
+                moveDir = new Vector3(h, 0, v).normalized;
+            }
+            
+            
         }
     }
 
@@ -94,6 +97,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + transform.TransformDirection(moveDir) * moveSpeed * Time.deltaTime);
+
+        float deg_dir = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
+        animator.SetInteger("Walking", 0);
+        if (moveDir.x != 0 | moveDir.z != 0)
+        {
+            animator.SetInteger("Walking", 1); //true
+            cat.gameObject.transform.localEulerAngles = new Vector3(0, deg_dir, 0);
+        }
     }
 
     public void SpeedUp()
