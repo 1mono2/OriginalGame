@@ -388,12 +388,28 @@ public class GameController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (player == "P1")
         {
             cameraParticle.gameObject.SetActive(true);
-            cameraParticle.rect = new Rect(0, 0, 0.5f, 1);
+            if (mode == IntegratedManager.GameMode.online || mode == IntegratedManager.GameMode.cpu)
+            {
+                cameraParticle.rect = new Rect(0, 0, 1, 1);
+            }
+            else if (mode == IntegratedManager.GameMode.offline)
+            {
+                cameraParticle.rect = new Rect(0, 0, 0.5f, 1);
+            }
+            
         }
         else if (player == "P2")
         {
             cameraParticle.gameObject.SetActive(true);
-            cameraParticle.rect = new Rect(0.5f, 0, 0.5f, 1);
+            if (mode == IntegratedManager.GameMode.online || mode == IntegratedManager.GameMode.cpu)
+            {
+                cameraParticle.rect = new Rect(0, 0, 1, 1);
+            }
+            else if (mode == IntegratedManager.GameMode.offline)
+            {
+                cameraParticle.rect = new Rect(0.5f, 0, 0.5f, 1);
+            }
+          
         }
     }
 

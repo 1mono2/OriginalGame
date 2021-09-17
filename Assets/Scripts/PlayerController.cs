@@ -7,8 +7,10 @@ using Photon.Realtime;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
-  
-    public float moveSpeed = 5;
+
+    [SerializeField]
+    protected float defaultMoveSeed = 5;
+    protected float moveSpeed;
     private Vector3 moveDir;
     Rigidbody rb;
 
@@ -22,7 +24,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private GameObject cat;
     Animator animator;
 
-
+    // constant
+    protected const float MOVESPEED_RATE = 2;
+    protected const float WAIT_SECONDS = 5.0f;
 
     private void Awake()
     {
@@ -63,6 +67,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         animator = cat.GetComponent<Animator>();
 
+        moveSpeed = defaultMoveSeed;
+
     }
 
     // Update is called once per frame
@@ -92,15 +98,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public void SpeedUp()
     {
-        moveSpeed = 10;
+        moveSpeed = moveSpeed * MOVESPEED_RATE;
         gameController.FloatingParticle("P1");
         StartCoroutine(SetDefalutSpeed());
     }
 
     public IEnumerator SetDefalutSpeed()
     {
-        yield return new WaitForSeconds(5.0f);
-        moveSpeed = 5;
+        yield return new WaitForSeconds(WAIT_SECONDS);
+        moveSpeed = defaultMoveSeed;
         gameController.FinishingParticle();
     }
 

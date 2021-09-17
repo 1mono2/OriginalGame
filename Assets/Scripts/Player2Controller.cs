@@ -7,7 +7,8 @@ using Photon.Pun;
 public class Player2Controller : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    protected float moveSpeed = 5;
+    protected float defaultMoveSeed = 5;
+    protected float moveSpeed;
     protected Vector3 moveDir;
     protected Rigidbody rb;
 
@@ -21,12 +22,15 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     protected GameObject astronaut;
     protected Animator animator;
 
+    protected const float MOVESPEED_RATE = 2;
+    protected const float WAIT_SECONDS = 5.0f;
 
     protected virtual void Awake()
     {
         integratedManager = GameObject.Find("IntegratedManager").GetComponent<IntegratedManager>();
         mode = integratedManager.GetMode();
         PhotonNetwork.NickName = "Player2";
+        // Camera Inststance
         Vector3 camPos = new Vector3(0, 7.9f, -0.05f) + this.gameObject.transform.position;
         Quaternion camRotate = Quaternion.Euler(90, 180, 0);
         if (photonView.IsMine && mode == IntegratedManager.GameMode.online)
@@ -51,6 +55,8 @@ public class Player2Controller : MonoBehaviourPunCallbacks
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
         animator = astronaut.GetComponent<Animator>();
+
+        moveSpeed = defaultMoveSeed;
 
     }
 
@@ -92,17 +98,17 @@ public class Player2Controller : MonoBehaviourPunCallbacks
     }
 
 
-    internal void SpeedUp()
+    internal virtual void SpeedUp()
     {
-        moveSpeed = 10;
+        moveSpeed = moveSpeed * MOVESPEED_RATE;
         gameController.FloatingParticle("P2");
         StartCoroutine(SetDefalutSpeed());
     }
 
     internal IEnumerator SetDefalutSpeed()
     {
-        yield return new WaitForSeconds(5.0f);
-        moveSpeed = 5;
+        yield return new WaitForSeconds(WAIT_SECONDS);
+        moveSpeed = defaultMoveSeed;
         gameController.FinishingParticle();
     }
 

@@ -14,11 +14,9 @@ public class ChaserController : Player2Controller
         toGetItem,
     }
     private PurposeState purposeState = PurposeState.search;
-    private Vector3 playerPos;
     private Vector3 destination;
     float planetMag;
     Vector3 arcticPos = new Vector3(0.1f, 7.49f, 0.1f);
-    Vector3 latestChaserPos;
     GameObject sphere;
     protected override void Awake()
     {
@@ -29,14 +27,12 @@ public class ChaserController : Player2Controller
 
     protected override void Start()
     {
-
-        rb = GetComponent<Rigidbody>();
-        planet = GameObject.FindWithTag("planet");
+        base.Start();
+        
         planetCollider = planet.GetComponent<SphereCollider>();
         planetMag = planetCollider.radius * (planet.transform.localScale.x);
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        animator = astronaut.GetComponent<Animator>();
 
+        
         destination = RandomDestination();
         Vector3 chaserOnPlanetPos = transform.position * (planetMag / transform.position.magnitude);
         moveDir = CalAzimuth(chaserOnPlanetPos, destination);
@@ -49,7 +45,7 @@ public class ChaserController : Player2Controller
         if (gameController.isBattling == true)
         {
 
-            transform.rotation = Quaternion.LookRotation(CalArcticDirection(this.transform.position), this.transform.position);
+            
             if (purposeState == PurposeState.chase)
             {
 
@@ -93,6 +89,18 @@ public class ChaserController : Player2Controller
             }
 
         }
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        transform.rotation = Quaternion.LookRotation(CalArcticDirection(this.transform.position), this.transform.position);
+    }
+
+    internal override void SpeedUp()
+    {
+        moveSpeed = moveSpeed * MOVESPEED_RATE;
+        StartCoroutine(SetDefalutSpeed());
     }
 
 

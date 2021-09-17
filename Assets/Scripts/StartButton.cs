@@ -11,9 +11,7 @@ public class StartButton : MonoBehaviour
     [SerializeField]
     Image explain;
     [SerializeField]
-    Button twoPlayerBattleButton;
-    [SerializeField]
-    Button onlineBattleButton;
+    Canvas gameModeChoice;
     [SerializeField]
     Text Heading;
     [SceneName]
@@ -65,8 +63,7 @@ public class StartButton : MonoBehaviour
     {
         isActivatedExplain = true;
         explain.gameObject.SetActive(true);
-        twoPlayerBattleButton.gameObject.SetActive(false);
-        onlineBattleButton.gameObject.SetActive(false);
+        gameModeChoice.gameObject.SetActive(false);
         Heading.gameObject.SetActive(false);
     }
 
@@ -74,8 +71,7 @@ public class StartButton : MonoBehaviour
     {
         isActivatedExplain = false;
         explain.gameObject.SetActive(false);
-        twoPlayerBattleButton.gameObject.SetActive(true);
-        onlineBattleButton.gameObject.SetActive(true);
+        gameModeChoice.gameObject.SetActive(true);
         Heading.gameObject.SetActive(true);
     }
 }

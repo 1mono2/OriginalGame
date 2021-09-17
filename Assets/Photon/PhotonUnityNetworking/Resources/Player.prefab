@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333e62ca4d732f745bf4e515b777ac19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  defaultMoveSeed: 5
   planet: {fileID: 0}
   gameobjController: {fileID: 0}
   cat: {fileID: 4473397154017539859}

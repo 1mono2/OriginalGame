@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f195d16cddb315643a1243c7908019dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4.01
+  defaultMoveSeed: 4
   astronaut: {fileID: 9109893106692894847}
 --- !u!1001 &271902552254242065
 PrefabInstance:
